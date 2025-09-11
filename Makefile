@@ -12,8 +12,12 @@ SRCS = \
 	parse_utils.c \
 	gnl_provisoria.c
 
+# Arquivos fontes da parte de bônus
+SRCS_BONUS = 
+
 # Arquivo objeto correspondente
 OBJS = $(SRCS:.c=.o)
+OBJS_BONUS = $(SRCS_BONUS:.c=.o)
 
 # Regra principal
 all: $(NAME)
@@ -21,15 +25,19 @@ all: $(NAME)
 $(NAME): $(OBJS)
 	$(CC) $(CFLAGS) $(OBJS) -o $(NAME)
 
+# Regra para o bônus
+bonus: $(OBJS) $(OBJS_BONUS)
+	$(CC) $(CFLAGS) $(OBJS) $(OBJS_BONUS) -o $(NAME)_bonus
+
 # Limpa os arquivos .o
 clean:
-	rm -f $(OBJS)
+	rm -f $(OBJS) $(OBJS_BONUS)
 
 # Limpa tudo, inclusive o executável
 fclean: clean
-	rm -f $(NAME)
+	rm -f $(NAME) $(NAME)_bonus
 
 # Recompila do zero
 re: fclean all
 
-.PHONY: all clean fclean re
+.PHONY: all clean fclean re bonus
