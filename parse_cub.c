@@ -27,7 +27,7 @@ static int is_numeric(char *str)
 }
 
 // Adaptação da função de parsing de cor
-static int  parse_color(const char *line)
+static int parse_color(const char *line)
 {
     int     r, g, b;
     char    *tmp_line;
@@ -141,9 +141,6 @@ static void flood_fill(char **map, int x, int y, int max_x, int max_y, int *is_v
         *is_valid = 0;
         return;
     }
-    // Para mapas retangulares, verifique x >= map_width, mas para irregulares,
-    // o espaço ' ' também pode ser um buraco.
-    // A verificação abaixo garante que não estamos em um espaço vazio fora da "parede"
     if (x >= (int)strlen(map[y]) || map[y][x] == ' ') {
         *is_valid = 0;
         return;
@@ -245,24 +242,56 @@ int parse_cub_file(char *filename, t_config *cfg)
             continue;
         }
 
-        if (cfg->is_in_map_section && (starts_with(trimmed, "NO") || starts_with(trimmed, "SO") || starts_with(trimmed, "WE") || starts_with(trimmed, "EA") || starts_with(trimmed, "F") || starts_with(trimmed, "C")))
+        // Nova lógica de verificação
+        if (starts_with(trimmed, "NO ") || starts_with(trimmed, "SO ") || 
+            starts_with(trimmed, "WE ") || starts_with(trimmed, "EA "))
         {
-            printf(ERROR_MSG "Configurações após o início do mapa\n");
-            free(line);
-            close(fd);
-            return (1);
+            if (cfg->is_in_map_section)
+            {
+                printf(ERROR_MSG "Configurações após o início do mapa\n");
+                free(line);
+                close(fd);
+                return (1);
+            }
+            if (parse_config_line(trimmed, cfg)) { free(line); close(fd); return (1); }
+            config_count++;
         }
-
-        int map_check = is_map_line(trimmed);
-        if (map_check == -1)
+        else if (starts_with(trimmed, "F "))
         {
-            printf(ERROR_MSG "Caracteres inválidos no mapa.\n");
-            free(line);
-            close(fd);
-            return (1);
+            if (cfg->is_in_map_section)
+            {
+                printf(ERROR_MSG "Configurações após o início do mapa\n");
+                free(line);
+                close(fd);
+                return (1);
+            }
+            cfg->floor_color = parse_color(trimmed + 1);
+            if (cfg->floor_color == -1) { free(line); close(fd); return (1); }
+            config_count++;
         }
-        else if (map_check == 1)
+        else if (starts_with(trimmed, "C "))
         {
+            if (cfg->is_in_map_section)
+            {
+                printf(ERROR_MSG "Configurações após o início do mapa\n");
+                free(line);
+                close(fd);
+                return (1);
+            }
+            cfg->ceiling_color = parse_color(trimmed + 1);
+            if (cfg->ceiling_color == -1) { free(line); close(fd); return (1); }
+            config_count++;
+        }
+        else // Não é uma linha de configuração
+        {
+            int map_check = is_map_line(trimmed);
+            if (map_check == -1)
+            {
+                printf(ERROR_MSG "Caracteres inválidos no mapa.\n");
+                free(line);
+                close(fd);
+                return (1);
+            }
             if (config_count < 6)
             {
                 printf(ERROR_MSG "Configurações incompletas antes do mapa.\n");
@@ -286,48 +315,6 @@ int parse_cub_file(char *filename, t_config *cfg)
             else
             {
                 printf(ERROR_MSG "Mapa excede o limite de %d linhas.\n", MAX_MAP_LINES);
-                free(line);
-                close(fd);
-                return (1);
-            }
-        }
-        else
-        {
-            if (starts_with(trimmed, "NO "))
-            {
-                if (parse_config_line(trimmed, cfg)) { free(line); close(fd); return (1); }
-                config_count++;
-            }
-            else if (starts_with(trimmed, "SO "))
-            {
-                if (parse_config_line(trimmed, cfg)) { free(line); close(fd); return (1); }
-                config_count++;
-            }
-            else if (starts_with(trimmed, "WE "))
-            {
-                if (parse_config_line(trimmed, cfg)) { free(line); close(fd); return (1); }
-                config_count++;
-            }
-            else if (starts_with(trimmed, "EA "))
-            {
-                if (parse_config_line(trimmed, cfg)) { free(line); close(fd); return (1); }
-                config_count++;
-            }
-            else if (starts_with(trimmed, "F "))
-            {
-                cfg->floor_color = parse_color(trimmed + 1);
-                if (cfg->floor_color == -1) { free(line); close(fd); return (1); }
-                config_count++;
-            }
-            else if (starts_with(trimmed, "C "))
-            {
-                cfg->ceiling_color = parse_color(trimmed + 1);
-                if (cfg->ceiling_color == -1) { free(line); close(fd); return (1); }
-                config_count++;
-            }
-            else
-            {
-                printf(ERROR_MSG "Linha de configuração desconhecida.\n");
                 free(line);
                 close(fd);
                 return (1);
