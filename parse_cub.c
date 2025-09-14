@@ -16,13 +16,11 @@ static int is_numeric(char *str)
 {
     while (*str == ' ' || *str == '\t')
         str++;
-
     if (!*str)
         return (0);
-
     while (*str)
     {
-        if (*str == '\n') // Ignorar quebra de linha
+        if (*str == '\n')
             break;
         if (*str < '0' || *str > '9')
             return (0);
@@ -30,7 +28,6 @@ static int is_numeric(char *str)
     }
     return (1);
 }
-
 
 static char *skip_spaces(char *str)
 {
@@ -49,8 +46,7 @@ static int parse_color(const char *line)
 
     tmp_line = ft_strdup(line);
     if (!tmp_line)
-        return (-1);
-    
+        return (-1);   
     char *clean_line = skip_spaces(tmp_line);
     i = 0;
     part = strtok(clean_line, ",");
@@ -60,18 +56,15 @@ static int parse_color(const char *line)
         i++;
         part = strtok(NULL, ",");
     }
-    
     if (i != 3 || part != NULL)
     {
         printf(ERROR_MSG "Formato de cor inválido\n");
         free(tmp_line);
         return (-1);
     }
-    
     r = atoi(parts[0]);
     g = atoi(parts[1]);
     b = atoi(parts[2]);
-
     if (r < 0 || r > 255 || g < 0 || g > 255 || b < 0 || b > 255 ||
         !is_numeric(parts[0]) || !is_numeric(parts[1]) || !is_numeric(parts[2]))
     {
@@ -79,7 +72,6 @@ static int parse_color(const char *line)
         free(tmp_line);
         return (-1);
     }
-
     free(tmp_line);
     return ((r << 16) | (g << 8) | b);
 }
@@ -118,28 +110,24 @@ static int parse_config_line(char *line, t_config *cfg)
     else if (starts_with(line, "EA ")) { target_path = &cfg->ea_path; path_start = line + 2; }
     else if (starts_with(line, "F ")) { cfg->floor_color = parse_color(line + 1); return (cfg->floor_color == -1); }
     else if (starts_with(line, "C ")) { cfg->ceiling_color = parse_color(line + 1); return (cfg->ceiling_color == -1); }
-    else { return (1); } // Identificador não reconhecido
-
+    else { return (1); }
     if (*target_path != NULL)
     {
         printf(ERROR_MSG "Configuração de textura duplicada\n");
         return (1);
     }
-
     while (*path_start == ' ') path_start++;
     *target_path = ft_strdup(path_start);
     int len = strlen(*target_path);
     if (len > 0 && (*target_path)[len - 1] == '\n')
-        (*target_path)[len - 1] = '\0';
-    
-    // Validação de arquivo (descomente para a versão final)
+        (*target_path)[len - 1] = '\0';    
+    // Validação de arquivo (descomentar para ver as texturas)
     // int fd = open(*target_path, O_RDONLY);
     // if (fd < 0) {
     //     printf(ERROR_MSG "Caminho de textura inválido: %s\n", *target_path);
     //     return (1);
     // }
     // close(fd);
-    
     return (0);
 }
 
@@ -147,12 +135,9 @@ static void flood_fill(char **map, int x, int y, int max_x, int max_y, int *is_v
 {
     if (x < 0 || y < 0 || y >= max_y) { *is_valid = 0; return; }
     if (x >= (int)strlen(map[y]) || map[y][x] == ' ') { *is_valid = 0; return; }
-    
     char c = map[y][x];
     if (c == '1' || c == 'V') return;
-
     map[y][x] = 'V';
-
     flood_fill(map, x + 1, y, max_x, max_y, is_valid);
     flood_fill(map, x - 1, y, max_x, max_y, is_valid);
     flood_fill(map, x, y + 1, max_x, max_y, is_valid);
@@ -190,24 +175,19 @@ int validate_map(t_config *cfg)
     if (find_and_validate_player(cfg, &player_x, &player_y)) {
         printf(ERROR_MSG "Número de posições de jogador inválido (deve ser 1).\n");
         return (1);
-    }
-    
+    } 
     map_copy = copy_map(cfg->map, cfg->map_height);
     if (!map_copy) {
         printf(ERROR_MSG "Erro de alocação ao validar o mapa.\n");
         return (1);
     }
-    
     flood_fill(map_copy, player_x, player_y, strlen(map_copy[player_y]), cfg->map_height, &is_valid);
-    
     int i = 0;
     while(map_copy[i])
         free(map_copy[i++]);
-    free(map_copy);
-    
+    free(map_copy);    
     if (!is_valid)
         printf(ERROR_MSG "Mapa não é fechado.\n");
-
     return (!is_valid);
 }
 
@@ -220,14 +200,12 @@ int parse_cub_file(char *filename, t_config *cfg)
 
     fd = open(filename, O_RDONLY);
     if (fd < 0) return (printf(ERROR_MSG "Não foi possível abrir o arquivo do mapa.\n"), 1);
-    
     int config_count = 0;
     while ((line = get_next_line(fd)) != NULL)
     {
         char *trimmed = line;
         while (*trimmed == ' ' || *trimmed == '\n') trimmed++;
         if (*trimmed == '\0') { free(line); continue; }
-
         if (cfg->is_in_map_section)
         {
             int map_check = is_map_line(trimmed);
@@ -244,7 +222,6 @@ int parse_cub_file(char *filename, t_config *cfg)
         }
         else
         {
-            // Verificação de identificadores
             if (starts_with(trimmed, "NO")) {
                 if (trimmed[2] != ' ' && trimmed[2] != '\t') { /* Erro de formato */ }
                 if (parse_config_line(trimmed, cfg)) { free(line); close(fd); return (1); }
@@ -305,21 +282,17 @@ int parse_cub_file(char *filename, t_config *cfg)
         }
         free(line);
     }
-    close(fd);
-    
+    close(fd);    
     if (config_count < 6 || map_line_count == 0) {
         printf(ERROR_MSG "Configurações ou mapa incompletos.\n");
         return (1);
     }
-
     cfg->map = copy_map(temp_map, map_line_count);
     cfg->map_height = map_line_count;
-    for (int i = 0; i < map_line_count; i++) free(temp_map[i]);
-    
+    for (int i = 0; i < map_line_count; i++) free(temp_map[i]);    
     if (validate_map(cfg)) {
         free_config_and_map(cfg);
         return (1);
     }
-
     return (0);
 }
