@@ -6,7 +6,7 @@
 /*   By: lalves-d <lalves-d@student.42rio>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/15 08:27:19 by lalves-d          #+#    #+#             */
-/*   Updated: 2025/09/15 09:03:02 by lalves-d         ###   ########.fr       */
+/*   Updated: 2025/09/15 14:46:10 by lalves-d         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,36 +35,80 @@ static int is_map_line(const char *line)
     return (has_map_char);
 }
 
-static int parse_config_line(char *line, t_config *cfg)
+static char	**get_target_path(char *line, t_config *cfg)
 {
-    char **target_path = NULL;
-    char *path_start;
+	if (starts_with(line, "NO "))
+		return (&cfg->no_path);
+	else if (starts_with(line, "SO "))
+		return (&cfg->so_path);
+	else if (starts_with(line, "WE "))
+		return (&cfg->we_path);
+	else if (starts_with(line, "EA "))
+		return (&cfg->ea_path);
+	return (NULL);
+}
 
-    if (starts_with(line, "NO ")) { target_path = &cfg->no_path; path_start = line + 2; }
-    else if (starts_with(line, "SO ")) { target_path = &cfg->so_path; path_start = line + 2; }
-    else if (starts_with(line, "WE ")) { target_path = &cfg->we_path; path_start = line + 2; }
-    else if (starts_with(line, "EA ")) { target_path = &cfg->ea_path; path_start = line + 2; }
-    else if (starts_with(line, "F ")) { cfg->floor_color = parse_color(line + 1); return (cfg->floor_color == -1); }
-    else if (starts_with(line, "C ")) { cfg->ceiling_color = parse_color(line + 1); return (cfg->ceiling_color == -1); }
-    else { return (1); }
-    if (*target_path != NULL)
-    {
-        printf(ERROR_MSG "Configuração de textura duplicada\n");
-        return (1);
-    }
-    while (*path_start == ' ') path_start++;
-    *target_path = ft_strdup(path_start);
-    int len = strlen(*target_path);
-    if (len > 0 && (*target_path)[len - 1] == '\n')
-        (*target_path)[len - 1] = '\0';    
-    // Validação de arquivo (descomentar para ver as texturas)
-    // int fd = open(*target_path, O_RDONLY);
-    // if (fd < 0) {
-    //     printf(ERROR_MSG "Caminho de textura inválido: %s\n", *target_path);
-    //     return (1);
-    // }
-    // close(fd);
-    return (0);
+static int	validate_and_assign_path(char **target_path, char *path_start)
+{
+	int	len;
+	int	fd;
+
+	if (*target_path != NULL)
+	{
+		printf(ERROR_MSG "Configuração de textura duplicada\n");
+		return (1);
+	}
+	while (*path_start == ' ')
+		path_start++;
+	*target_path = ft_strdup(path_start);
+	len = strlen(*target_path);
+	if (len > 0 && (*target_path)[len - 1] == '\n')
+		(*target_path)[len - 1] = '\0';
+	fd = open(*target_path, O_RDONLY);
+	if (fd < 0)
+	{
+		printf(ERROR_MSG "Caminho de textura inválido: %s\n", *target_path);
+		return (1);
+	}
+	close(fd);
+	return (0);
+}
+
+static int	parse_texture_path(char *line, t_config *cfg)
+{
+	char	**target_path;
+	char	*path_start;
+
+	target_path = get_target_path(line, cfg);
+	if (!target_path)
+		return (1);
+	path_start = line + 2;
+	return (validate_and_assign_path(target_path, path_start));
+}
+
+static int	parse_color_info(char *line, t_config *cfg)
+{
+	if (starts_with(line, "F "))
+	{
+		cfg->floor_color = parse_color(line + 1);
+		return (cfg->floor_color == -1);
+	}
+	else if (starts_with(line, "C "))
+	{
+		cfg->ceiling_color = parse_color(line + 1);
+		return (cfg->ceiling_color == -1);
+	}
+	return (1);
+}
+
+static int	parse_config_line(char *line, t_config *cfg)
+{
+	if (starts_with(line, "NO") || starts_with(line, "SO")
+		|| starts_with(line, "WE") || starts_with(line, "EA"))
+		return (parse_texture_path(line, cfg));
+	else if (starts_with(line, "F") || starts_with(line, "C"))
+		return (parse_color_info(line, cfg));
+	return (1);
 }
 
 static void flood_fill(char **map, int x, int y, int max_x, int max_y, int *is_valid)
