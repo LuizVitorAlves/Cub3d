@@ -67,22 +67,33 @@ char **copy_map(char **temp_map, int size)
     return (map);
 }
 
-void    free_config_and_map(t_config *cfg)
+static void safe_free(void **ptr)
 {
-    if (cfg->no_path)
-        free(cfg->no_path);
-    if (cfg->so_path)
-        free(cfg->so_path);
-    if (cfg->we_path)
-        free(cfg->we_path);
-    if (cfg->ea_path)
-        free(cfg->ea_path);
+    if (ptr && *ptr)
+    {
+        free(*ptr);
+        *ptr = NULL;
+    }
+}
+
+void free_config_and_map(t_config *cfg)
+{
+    if (!cfg)
+        return;
+    safe_free((void **)&cfg->no_path);
+    safe_free((void **)&cfg->so_path);
+    safe_free((void **)&cfg->we_path);
+    safe_free((void **)&cfg->ea_path);
     if (cfg->map)
     {
         int i = 0;
         while (cfg->map[i])
-            free(cfg->map[i++]);
+        {
+            safe_free((void **)&cfg->map[i]);
+            i++;
+        }
         free(cfg->map);
+        cfg->map = NULL;
     }
 }
 

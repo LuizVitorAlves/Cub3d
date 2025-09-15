@@ -13,7 +13,7 @@
 #include "cub3d.h"
 #include <unistd.h>
 #include <stdlib.h>
-#define BUFFER_SIZE 42
+#define BUFFER_SIZE 100000
 
 /*
 ** Funções de utilidade do GNL movidas para este arquivo e declaradas como static

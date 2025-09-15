@@ -6,7 +6,7 @@
 /*   By: lalves-d <lalves-d@student.42rio>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/15 08:27:19 by lalves-d          #+#    #+#             */
-/*   Updated: 2025/09/15 14:46:10 by lalves-d         ###   ########.fr       */
+/*   Updated: 2025/09/15 15:28:40 by lalves-d         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -171,108 +171,169 @@ int validate_map(t_config *cfg)
     return (!is_valid);
 }
 
-int parse_cub_file(char *filename, t_config *cfg)
+int	parse_cub_file(char *filename, t_config *cfg)
 {
-    int     fd;
-    char    *line;
-    char    *temp_map[MAX_MAP_LINES];
-    int     map_line_count = 0;
+	int		fd;
+	char	*line;
+	char	*temp_map[MAX_MAP_LINES];
+	int		map_line_count;
+	int		config_count;
+	char	*trimmed;
 
-    fd = open(filename, O_RDONLY);
-    if (fd < 0) return (printf(ERROR_MSG "Não foi possível abrir o arquivo do mapa.\n"), 1);
-    int config_count = 0;
-    while ((line = get_next_line(fd)) != NULL)
-    {
-        char *trimmed = line;
-        while (*trimmed == ' ' || *trimmed == '\n') trimmed++;
-        if (*trimmed == '\0') { free(line); continue; }
-        if (cfg->is_in_map_section)
-        {
-            int map_check = is_map_line(trimmed);
-            if (map_check == -1) {
-                printf(ERROR_MSG "Caracteres inválidos no mapa.\n");
-                free(line); close(fd); return (1);
-            }
-            temp_map[map_line_count] = ft_strdup(line);
-            if (!temp_map[map_line_count]) {
-                printf(ERROR_MSG "Erro de alocação de memória.\n");
-                free(line); close(fd); return (1);
-            }
-            map_line_count++;
-        }
-        else
-        {
-            if (starts_with(trimmed, "NO")) {
-                if (trimmed[2] != ' ' && trimmed[2] != '\t') { /* Erro de formato */ }
-                if (parse_config_line(trimmed, cfg)) { free(line); close(fd); return (1); }
-                config_count++;
-            }
-            else if (starts_with(trimmed, "SO")) {
-                if (trimmed[2] != ' ' && trimmed[2] != '\t') { /* Erro de formato */ }
-                if (parse_config_line(trimmed, cfg)) { free(line); close(fd); return (1); }
-                config_count++;
-            }
-            else if (starts_with(trimmed, "WE")) {
-                if (trimmed[2] != ' ' && trimmed[2] != '\t') { /* Erro de formato */ }
-                if (parse_config_line(trimmed, cfg)) { free(line); close(fd); return (1); }
-                config_count++;
-            }
-            else if (starts_with(trimmed, "EA")) {
-                if (trimmed[2] != ' ' && trimmed[2] != '\t') { /* Erro de formato */ }
-                if (parse_config_line(trimmed, cfg)) { free(line); close(fd); return (1); }
-                config_count++;
-            }
-            else if (starts_with(trimmed, "F")) {
-                if (trimmed[1] != ' ' && trimmed[1] != '\t') { /* Erro de formato */ }
-                if (cfg->is_in_map_section) { /* Erro de ordem */ }
-                cfg->floor_color = parse_color(skip_spaces(trimmed + 1));
-                if (cfg->floor_color == -1) { free(line); close(fd); return (1); }
-                config_count++;
-            }
-            else if (starts_with(trimmed, "C")) {
-                if (trimmed[1] != ' ' && trimmed[1] != '\t') { /* Erro de formato */ }
-                if (cfg->is_in_map_section) { /* Erro de ordem */ }
-                cfg->ceiling_color = parse_color(skip_spaces(trimmed + 1));
-                if (cfg->ceiling_color == -1) { free(line); close(fd); return (1); }
-                config_count++;
-            }
-            else {
-                if (config_count >= 6)
-                {
-                    int map_check = is_map_line(trimmed);
-                    if (map_check == 1) {
-                        cfg->is_in_map_section = 1;
-                        temp_map[map_line_count] = ft_strdup(line);
-                        if (!temp_map[map_line_count]) {
-                            printf(ERROR_MSG "Erro de alocação de memória.\n");
-                            free(line); close(fd); return (1);
-                        }
-                        map_line_count++;
-                    } else {
-                        printf(ERROR_MSG "Linha de configuração desconhecida.\n");
-                        free(line); close(fd); return (1);
-                    }
-                }
-                else
-                {
-                    printf(ERROR_MSG "Configurações incompletas antes do mapa.\n");
-                    free(line); close(fd); return (1);
-                }
-            }
-        }
-        free(line);
-    }
-    close(fd);    
-    if (config_count < 6 || map_line_count == 0) {
-        printf(ERROR_MSG "Configurações ou mapa incompletos.\n");
-        return (1);
-    }
-    cfg->map = copy_map(temp_map, map_line_count);
-    cfg->map_height = map_line_count;
-    for (int i = 0; i < map_line_count; i++) free(temp_map[i]);    
-    if (validate_map(cfg)) {
-        free_config_and_map(cfg);
-        return (1);
-    }
-    return (0);
+	map_line_count = 0;
+	config_count = 0;
+	fd = open(filename, O_RDONLY);
+	if (fd < 0)
+		return (printf(ERROR_MSG "Não foi possível abrir o arquivo do mapa.\n"), 1);
+	while ((line = get_next_line(fd)) != NULL)
+	{
+		trimmed = line;
+		while (*trimmed == ' ' || *trimmed == '\n')
+			trimmed++;
+		if (*trimmed == '\0')
+		{
+			if (cfg->is_in_map_section)
+			{
+				printf(ERROR_MSG "Linha vazia dentro do mapa.\n");
+				free(line);
+				close(fd);
+				return (1);
+			}
+			free(line);
+			continue;
+		}
+		if (cfg->is_in_map_section)
+		{
+			int map_check = is_map_line(trimmed);
+			if (map_check == -1)
+			{
+				printf(ERROR_MSG "Caracteres inválidos no mapa.\n");
+				free(line);
+				close(fd);
+				return (1);
+			}
+			temp_map[map_line_count] = ft_strdup(line);
+			if (!temp_map[map_line_count])
+			{
+				printf(ERROR_MSG "Erro de alocação de memória.\n");
+				free(line);
+				close(fd);
+				return (1);
+			}
+			map_line_count++;
+		}
+		else if (starts_with(trimmed, "NO"))
+		{
+			if (parse_config_line(trimmed, cfg))
+			{
+				free(line);
+				close(fd);
+				return (1);
+			}
+			config_count++;
+		}
+		else if (starts_with(trimmed, "SO"))
+		{
+			if (parse_config_line(trimmed, cfg))
+			{
+				free(line);
+				close(fd);
+				return (1);
+			}
+			config_count++;
+		}
+		else if (starts_with(trimmed, "WE"))
+		{
+			if (parse_config_line(trimmed, cfg))
+			{
+				free(line);
+				close(fd);
+				return (1);
+			}
+			config_count++;
+		}
+		else if (starts_with(trimmed, "EA"))
+		{
+			if (parse_config_line(trimmed, cfg))
+			{
+				free(line);
+				close(fd);
+				return (1);
+			}
+			config_count++;
+		}
+		else if (starts_with(trimmed, "F"))
+		{
+			cfg->floor_color = parse_color(skip_spaces(trimmed + 1));
+			if (cfg->floor_color == -1)
+			{
+				free(line);
+				close(fd);
+				return (1);
+			}
+			config_count++;
+		}
+		else if (starts_with(trimmed, "C"))
+		{
+			cfg->ceiling_color = parse_color(skip_spaces(trimmed + 1));
+			if (cfg->ceiling_color == -1)
+			{
+				free(line);
+				close(fd);
+				return (1);
+			}
+			config_count++;
+		}
+		else
+		{
+			if (config_count >= 6)
+			{
+				int map_check = is_map_line(trimmed);
+				if (map_check == 1)
+				{
+					cfg->is_in_map_section = 1;
+					temp_map[map_line_count] = ft_strdup(line);
+					if (!temp_map[map_line_count])
+					{
+						printf(ERROR_MSG "Erro de alocação de memória.\n");
+						free(line);
+						close(fd);
+						return (1);
+					}
+					map_line_count++;
+				}
+				else
+				{
+					printf(ERROR_MSG "Linha de configuração desconhecida.\n");
+					free(line);
+					close(fd);
+					return (1);
+				}
+			}
+			else
+			{
+				printf(ERROR_MSG "Configurações incompletas antes do mapa.\n");
+				free(line);
+				close(fd);
+				return (1);
+			}
+		}
+		free(line);
+	}
+	close(fd);
+	if (config_count < 6 || map_line_count == 0)
+	{
+		printf(ERROR_MSG "Configurações ou mapa incompletos.\n");
+		return (1);
+	}
+	cfg->map = copy_map(temp_map, map_line_count);
+	cfg->map_height = map_line_count;
+	for (int i = 0; i < map_line_count; i++)
+		free(temp_map[i]);
+	if (validate_map(cfg))
+	{
+		free_config_and_map(cfg);
+		return (1);
+	}
+	return (0);
 }
