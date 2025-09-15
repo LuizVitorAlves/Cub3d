@@ -6,7 +6,7 @@
 /*   By: lalves-d <lalves-d@student.42rio>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/15 08:27:19 by lalves-d          #+#    #+#             */
-/*   Updated: 2025/09/15 15:28:40 by lalves-d         ###   ########.fr       */
+/*   Updated: 2025/09/15 17:03:09 by lalves-d         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,90 +25,89 @@ static int is_map_line(const char *line)
     {
         if (line[i] != '1' && line[i] != '0' && line[i] != ' ' &&
             line[i] != 'N' && line[i] != 'S' && line[i] != 'E' && line[i] != 'W')
-        {
             return (-1);
-        }
-        if (line[i] == '1' || line[i] == '0' || line[i] == 'N' || line[i] == 'S' || line[i] == 'E' || line[i] == 'W')
+        if (line[i] == '1' || line[i] == '0' || line[i] == 'N' || 
+            line[i] == 'S' || line[i] == 'E' || line[i] == 'W')
             has_map_char = 1;
         i++;
     }
     return (has_map_char);
 }
 
-static char	**get_target_path(char *line, t_config *cfg)
+static char **get_target_path(char *line, t_config *cfg)
 {
-	if (starts_with(line, "NO "))
-		return (&cfg->no_path);
-	else if (starts_with(line, "SO "))
-		return (&cfg->so_path);
-	else if (starts_with(line, "WE "))
-		return (&cfg->we_path);
-	else if (starts_with(line, "EA "))
-		return (&cfg->ea_path);
-	return (NULL);
+    if (starts_with(line, "NO "))
+        return (&cfg->no_path);
+    else if (starts_with(line, "SO "))
+        return (&cfg->so_path);
+    else if (starts_with(line, "WE "))
+        return (&cfg->we_path);
+    else if (starts_with(line, "EA "))
+        return (&cfg->ea_path);
+    return (NULL);
 }
 
-static int	validate_and_assign_path(char **target_path, char *path_start)
+static int validate_and_assign_path(char **target_path, char *path_start)
 {
-	int	len;
-	int	fd;
+    int len;
+    int fd;
 
-	if (*target_path != NULL)
-	{
-		printf(ERROR_MSG "Configuração de textura duplicada\n");
-		return (1);
-	}
-	while (*path_start == ' ')
-		path_start++;
-	*target_path = ft_strdup(path_start);
-	len = strlen(*target_path);
-	if (len > 0 && (*target_path)[len - 1] == '\n')
-		(*target_path)[len - 1] = '\0';
-	fd = open(*target_path, O_RDONLY);
-	if (fd < 0)
-	{
-		printf(ERROR_MSG "Caminho de textura inválido: %s\n", *target_path);
-		return (1);
-	}
-	close(fd);
-	return (0);
+    if (*target_path != NULL)
+    {
+        printf(ERROR_MSG "Duplicate texture configuration.\n");
+        return (1);
+    }
+    while (*path_start == ' ')
+        path_start++;
+    *target_path = ft_strdup(path_start);
+    len = strlen(*target_path);
+    if (len > 0 && (*target_path)[len - 1] == '\n')
+        (*target_path)[len - 1] = '\0';
+    fd = open(*target_path, O_RDONLY);
+    if (fd < 0)
+    {
+        printf(ERROR_MSG "Invalid texture path: %s\n", *target_path);
+        return (1);
+    }
+    close(fd);
+    return (0);
 }
 
-static int	parse_texture_path(char *line, t_config *cfg)
+static int parse_texture_path(char *line, t_config *cfg)
 {
-	char	**target_path;
-	char	*path_start;
+    char **target_path;
+    char *path_start;
 
-	target_path = get_target_path(line, cfg);
-	if (!target_path)
-		return (1);
-	path_start = line + 2;
-	return (validate_and_assign_path(target_path, path_start));
+    target_path = get_target_path(line, cfg);
+    if (!target_path)
+        return (1);
+    path_start = line + 2;
+    return (validate_and_assign_path(target_path, path_start));
 }
 
-static int	parse_color_info(char *line, t_config *cfg)
+static int parse_color_info(char *line, t_config *cfg)
 {
-	if (starts_with(line, "F "))
-	{
-		cfg->floor_color = parse_color(line + 1);
-		return (cfg->floor_color == -1);
-	}
-	else if (starts_with(line, "C "))
-	{
-		cfg->ceiling_color = parse_color(line + 1);
-		return (cfg->ceiling_color == -1);
-	}
-	return (1);
+    if (starts_with(line, "F "))
+    {
+        cfg->floor_color = parse_color(skip_spaces(line + 1));
+        return (cfg->floor_color == -1);
+    }
+    else if (starts_with(line, "C "))
+    {
+        cfg->ceiling_color = parse_color(skip_spaces(line + 1));
+        return (cfg->ceiling_color == -1);
+    }
+    return (1);
 }
 
-static int	parse_config_line(char *line, t_config *cfg)
+static int parse_config_line(char *line, t_config *cfg)
 {
-	if (starts_with(line, "NO") || starts_with(line, "SO")
-		|| starts_with(line, "WE") || starts_with(line, "EA"))
-		return (parse_texture_path(line, cfg));
-	else if (starts_with(line, "F") || starts_with(line, "C"))
-		return (parse_color_info(line, cfg));
-	return (1);
+    if (starts_with(line, "NO") || starts_with(line, "SO")
+        || starts_with(line, "WE") || starts_with(line, "EA"))
+        return (parse_texture_path(line, cfg));
+    else if (starts_with(line, "F") || starts_with(line, "C"))
+        return (parse_color_info(line, cfg));
+    return (1);
 }
 
 static void flood_fill(char **map, int x, int y, int max_x, int max_y, int *is_valid)
@@ -126,14 +125,15 @@ static void flood_fill(char **map, int x, int y, int max_x, int max_y, int *is_v
 
 static int find_and_validate_player(t_config *cfg, int *player_x, int *player_y)
 {
-    int i = 0;
-    int j;
-    int player_count = 0;
+    int i = 0, j, player_count = 0;
 
-    while (cfg->map[i]) {
+    while (cfg->map[i])
+    {
         j = 0;
-        while (cfg->map[i][j]) {
-            if (strchr("NSWE", cfg->map[i][j])) {
+        while (cfg->map[i][j])
+        {
+            if (strchr("NSWE", cfg->map[i][j]))
+            {
                 player_count++;
                 *player_x = j;
                 *player_y = i;
@@ -142,8 +142,7 @@ static int find_and_validate_player(t_config *cfg, int *player_x, int *player_y)
         }
         i++;
     }
-    if (player_count != 1) return (1);
-    return (0);
+    return (player_count != 1);
 }
 
 int validate_map(t_config *cfg)
@@ -151,23 +150,26 @@ int validate_map(t_config *cfg)
     int player_x, player_y;
     char **map_copy;
     int is_valid = 1;
+    int i;
 
-    if (find_and_validate_player(cfg, &player_x, &player_y)) {
-        printf(ERROR_MSG "Número de posições de jogador inválido (deve ser 1).\n");
+    if (find_and_validate_player(cfg, &player_x, &player_y))
+    {
+        printf(ERROR_MSG "Invalid number of player positions (must be 1).\n");
         return (1);
-    } 
+    }
     map_copy = copy_map(cfg->map, cfg->map_height);
-    if (!map_copy) {
-        printf(ERROR_MSG "Erro de alocação ao validar o mapa.\n");
+    if (!map_copy)
+    {
+        printf(ERROR_MSG "Memory allocation error while validating map.\n");
         return (1);
     }
     flood_fill(map_copy, player_x, player_y, strlen(map_copy[player_y]), cfg->map_height, &is_valid);
-    int i = 0;
-    while(map_copy[i])
+    i = 0;
+    while (map_copy[i])
         free(map_copy[i++]);
-    free(map_copy);    
+    free(map_copy);
     if (!is_valid)
-        printf(ERROR_MSG "Mapa não é fechado.\n");
+        printf(ERROR_MSG "Map is not closed.\n");
     return (!is_valid);
 }
 
