@@ -10,7 +10,9 @@ SRCS = \
 	main.c \
 	parse_cub.c \
 	parse_utils.c \
-	gnl_provisoria.c
+	gnl_provisoria.c \
+	parse_color.c \
+	tokenizador.c 
 
 # Arquivos fontes da parte de bônus
 SRCS_BONUS = 

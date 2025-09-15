@@ -12,7 +12,6 @@
 
 #include "cub3d.h"
 
-//Verifica se a string começa com o prefixo dado.
 int starts_with(const char *str, const char *prefix)
 {
     int i = 0;
@@ -25,7 +24,6 @@ int starts_with(const char *str, const char *prefix)
     return (1);
 }
 
-//Duplica uma string, alocando memória para ela.
 char *ft_strdup(const char *s)
 {
     char    *new;
@@ -44,7 +42,6 @@ char *ft_strdup(const char *s)
     return (new);
 }
 
-//Copia o mapa temporário para o mapa final, alocando memória.
 char **copy_map(char **temp_map, int size)
 {
     char **map;
@@ -57,7 +54,7 @@ char **copy_map(char **temp_map, int size)
     while (i < size)
     {
         map[i] = ft_strdup(temp_map[i]);
-        if (!map[i]) // Caso de falha de alocação durante o loop
+        if (!map[i])
         {
             while (i-- > 0)
                 free(map[i]);
@@ -70,7 +67,6 @@ char **copy_map(char **temp_map, int size)
     return (map);
 }
 
-// Libera toda a memória alocada na estrutura t_config
 void    free_config_and_map(t_config *cfg)
 {
     if (cfg->no_path)
@@ -88,5 +84,30 @@ void    free_config_and_map(t_config *cfg)
             free(cfg->map[i++]);
         free(cfg->map);
     }
-    // Não precisa dar free na própria cfg, pois ela é uma variável local na main.
+}
+
+int	ft_atoi(const char *str)
+{
+	int		sign;
+	long	result;
+	int		i;
+
+	i = 0;
+	result = 0;
+	sign = 1;
+	while (str[i] == ' ' || (str[i] >= '\t' && str[i] <= '\r'))
+		i++;
+	if (str[i] == '-')
+	{
+		sign = -1;
+		i++;
+	}
+	else if (str[i] == '+')
+		i++;
+	while (str[i] >= '0' && str[i] <= '9')
+	{
+		result = result * 10 + (str[i] - '0');
+		i++;
+	}
+	return (sign * result);
 }

@@ -18,6 +18,7 @@
 # include <fcntl.h>
 # include <unistd.h>
 # include <string.h>
+# include <stddef.h>
 
 # define MAX_MAP_LINES 1024
 # define ERROR_MSG "Error\n"
@@ -46,8 +47,16 @@ int		starts_with(const char *str, const char *prefix);
 char	*ft_strdup(const char *s);
 char	**copy_map(char **temp_map, int size);
 void	free_config_and_map(t_config *cfg);
+int     ft_atoi(const char *str);
 
 // gnl_provisoria.c
 char	*get_next_line(int fd);
+
+//parse_color.c
+int parse_color(const char *line);
+char *skip_spaces(char *str);
+
+// tokenizador.c
+char    *ft_strtok(char *str, const char *delim);
 
 #endif

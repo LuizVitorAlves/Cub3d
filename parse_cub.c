@@ -1,80 +1,16 @@
 /* ************************************************************************** */
-/* */
-/* :::      ::::::::   */
-/* parse_cub.c                                        :+:      :+:    :+:   */
-/* +:+ +:+         +:+     */
-/* By: lalves-d <lalves-d@student.42.fr>          +#+  +:+       +#+        */
-/* +#+#+#+#+#+   +#+           */
-/* Created: 2025/07/15 14:59:01 by lalves-d          #+#    #+#             */
-/* Updated: 2025/07/15 15:58:02 by lalves-d         ###   ########.fr       */
-/* */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   parse_cub.c                                        :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: lalves-d <lalves-d@student.42rio>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025/09/15 08:27:19 by lalves-d          #+#    #+#             */
+/*   Updated: 2025/09/15 09:03:02 by lalves-d         ###   ########.fr       */
+/*                                                                            */
 /* ************************************************************************** */
 
 #include "cub3d.h"
-
-static int is_numeric(char *str)
-{
-    while (*str == ' ' || *str == '\t')
-        str++;
-    if (!*str)
-        return (0);
-    while (*str)
-    {
-        if (*str == '\n')
-            break;
-        if (*str < '0' || *str > '9')
-            return (0);
-        str++;
-    }
-    return (1);
-}
-
-static char *skip_spaces(char *str)
-{
-    while (*str == ' ' || *str == '\t')
-        str++;
-    return (str);
-}
-
-static int parse_color(const char *line)
-{
-    int     r, g, b;
-    char    *tmp_line;
-    char    *part;
-    char    *parts[3];
-    int     i;
-
-    tmp_line = ft_strdup(line);
-    if (!tmp_line)
-        return (-1);   
-    char *clean_line = skip_spaces(tmp_line);
-    i = 0;
-    part = strtok(clean_line, ",");
-    while (part && i < 3)
-    {
-        parts[i] = skip_spaces(part);
-        i++;
-        part = strtok(NULL, ",");
-    }
-    if (i != 3 || part != NULL)
-    {
-        printf(ERROR_MSG "Formato de cor inválido\n");
-        free(tmp_line);
-        return (-1);
-    }
-    r = atoi(parts[0]);
-    g = atoi(parts[1]);
-    b = atoi(parts[2]);
-    if (r < 0 || r > 255 || g < 0 || g > 255 || b < 0 || b > 255 ||
-        !is_numeric(parts[0]) || !is_numeric(parts[1]) || !is_numeric(parts[2]))
-    {
-        printf(ERROR_MSG "Cor fora do intervalo [0,255] ou formato inválido.\n");
-        free(tmp_line);
-        return (-1);
-    }
-    free(tmp_line);
-    return ((r << 16) | (g << 8) | b);
-}
 
 static int is_map_line(const char *line)
 {
