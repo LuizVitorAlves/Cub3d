@@ -6,7 +6,7 @@
 /*   By: lalves-d <lalves-d@student.42rio>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/15 08:27:19 by lalves-d          #+#    #+#             */
-/*   Updated: 2025/09/15 19:03:02 by lalves-d         ###   ########.fr       */
+/*   Updated: 2025/09/15 19:20:40 by lalves-d         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -271,42 +271,71 @@ static int	close_and_return(int fd, int code)
 	close(fd);
 	return (code);
 }
-
-int	parse_cub_file(char *filename, t_config *cfg)
+static int	read_file_lines(int fd, t_config *cfg, char **temp_map, int counts[2])
 {
-	int		fd;
 	char	*line;
-	int		map_count;
-	int		config_count;
-	char	*temp_map[MAX_MAP_LINES];
 
-	map_count = 0;
-	config_count = 0;
-	fd = open(filename, O_RDONLY);
-	if (fd < 0)
-		return (printf(ERROR_MSG
-				"Não foi possível abrir o arquivo do mapa.\n"), 1);
-	while ((line = get_next_line(fd)) != NULL)
+	line = get_next_line(fd);
+	while (line)
 	{
-		if (process_file_line(line, cfg, temp_map, &map_count,
-				&config_count))
+		if (process_file_line(line, cfg, temp_map, &counts[1], &counts[0]))
 		{
 			free(line);
-			return (close_and_return(fd, 1));
+			return (1);
 		}
 		free(line);
+		line = get_next_line(fd);
 	}
-	if (config_count < 6 || map_count == 0)
-		return (printf(ERROR_MSG "Configurações ou mapa incompletos.\n"), 1);
-	cfg->map = copy_map(temp_map, map_count);
-	cfg->map_height = map_count;
-	for (int i = 0; i < map_count; i++)
+	return (0);
+}
+
+/*
+** Pega o buffer temporário do mapa, valida as contagens,
+** e constrói o mapa final na struct de configuração.
+*/
+static int	build_and_validate_map(t_config *cfg, char **temp_map, int counts[2])
+{
+	int	i;
+
+	if (counts[0] < 6 || counts[1] == 0)
+	{
+		printf(ERROR_MSG "Configurações ou mapa incompletos.\n");
+		return (1);
+	}
+	cfg->map = copy_map(temp_map, counts[1]);
+	cfg->map_height = counts[1];
+	i = 0;
+	while (i < counts[1])
+	{
 		free(temp_map[i]);
+		i++;
+	}
 	if (validate_map(cfg))
 	{
 		free_config_and_map(cfg);
 		return (1);
 	}
+	return (0);
+}
+
+int	parse_cub_file(char *filename, t_config *cfg)
+{
+	int		fd;
+	char	*temp_map[MAX_MAP_LINES];
+	int		counts[2];
+
+	counts[0] = 0; // config_count
+	counts[1] = 0; // map_count
+	fd = open(filename, O_RDONLY);
+	if (fd < 0)
+	{
+		printf(ERROR_MSG "Não foi possível abrir o arquivo do mapa.\n");
+		return (1);
+	}
+	if (read_file_lines(fd, cfg, temp_map, counts))
+		return (close_and_return(fd, 1));
 	close(fd);
+	if (build_and_validate_map(cfg, temp_map, counts))
+		return (1);
 	return (0);
 }
