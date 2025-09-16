@@ -12,7 +12,8 @@ SRCS = \
 	parse_utils.c \
 	gnl_provisoria.c \
 	parse_color.c \
-	tokenizador.c 
+	tokenizador.c \
+	raycasting.c
 
 # Arquivos fontes da parte de bônus
 SRCS_BONUS = 
