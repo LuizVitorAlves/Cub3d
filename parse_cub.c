@@ -6,7 +6,7 @@
 /*   By: lalves-d <lalves-d@student.42rio>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/15 08:27:19 by lalves-d          #+#    #+#             */
-/*   Updated: 2025/09/17 08:37:38 by lalves-d         ###   ########.fr       */
+/*   Updated: 2025/09/17 16:20:28 by lalves-d         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -137,12 +137,15 @@ static void	flood_fill(char **map, int x, int y, int max_x, int max_y,
 	flood_fill(map, x, y - 1, max_x, max_y, is_valid);
 }
 
-static int	find_and_validate_player(t_config *cfg, int *player_x,
-		int *player_y)
+static int	find_and_validate_player(t_config *cfg, int *player_x, int *player_y)
 {
-	int	i = 0, j, player_count;
+	int	i;
+	int	j;
+	int	player_count;
 
-	i = 0, j, player_count = 0;
+	i = 0;
+	j = 0;
+	player_count = 0;
 	while (cfg->map[i])
 	{
 		j = 0;
@@ -160,6 +163,7 @@ static int	find_and_validate_player(t_config *cfg, int *player_x,
 	}
 	return (player_count != 1);
 }
+
 
 int	validate_map(t_config *cfg)
 {
