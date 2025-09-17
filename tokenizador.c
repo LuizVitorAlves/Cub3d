@@ -6,24 +6,25 @@
 /*   By: lalves-d <lalves-d@student.42rio>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/15 08:44:15 by lalves-d          #+#    #+#             */
-/*   Updated: 2025/09/15 09:40:00 by lalves-d         ###   ########.fr       */
+/*   Updated: 2025/09/17 08:39:00 by lalves-d         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "cub3d.h"
 
-static int is_delim(char c, const char *delim)
+static int	is_delim(char c, const char *delim)
 {
-    const char *d = delim;
-    if (!d)
-        return 0;
-    while (*d)
-    {
-        if (c == *d)
-            return 1;
-        d++;
-    }
-    return 0;
+	const char	*d = delim;
+
+	if (!d)
+		return (0);
+	while (*d)
+	{
+		if (c == *d)
+			return (1);
+		d++;
+	}
+	return (0);
 }
 
 static char	*init_ptr(char *str, const char *delim, char **save_ptr)
