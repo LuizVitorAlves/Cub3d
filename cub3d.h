@@ -6,7 +6,7 @@
 /*   By: lalves-d <lalves-d@student.42rio>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/16 19:13:15 by lalves-d          #+#    #+#             */
-/*   Updated: 2025/09/16 19:14:16 by lalves-d         ###   ########.fr       */
+/*   Updated: 2025/09/17 16:35:49 by lalves-d         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -76,5 +76,10 @@ char *skip_spaces(char *str);
 
 // tokenizador.c
 char    *ft_strtok(char *str, const char *delim);
+
+//render_utils.c
+void my_mlx_pixel_put(t_img *data, int x, int y, int color);
+int render_frame(t_game *game);
+void draw_wall_slice(t_game *game, int x, double perp_wall_dist, int side);
 
 #endif
