@@ -6,7 +6,7 @@
 /*   By: lalves-d <lalves-d@student.42rio>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/22 07:22:19 by lalves-d          #+#    #+#             */
-/*   Updated: 2025/09/22 17:20:44 by lalves-d         ###   ########.fr       */
+/*   Updated: 2025/09/22 17:28:13 by lalves-d         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -91,12 +91,8 @@ int handle_keys(int keycode, t_game *game)
     printf("Tecla pressionada, keycode: %d\n", keycode);
     if (keycode == 65307)
         close_window(game);
-    if ((keycode == 119 || keycode == 115) &&  (find_and_validate_player2(&game->cfg,&game->player.pos_x, &game->player.pos_y)) != 1)
-    {    
+    if ((keycode == 119 || keycode == 115))
         move_forward_backward(keycode, game);
-        printf(" x %f/n %f y ", game->player.pos_x, game->player.pos_y);
-        printf(" \n %d", find_and_validate_player2(&game->cfg,&game->player.pos_x, &game->player.pos_y));
-    }
     if (keycode == 97 || keycode == 100)
         move_left_right(keycode, game);
     if (keycode == 65361 || keycode == 65363)
