@@ -103,6 +103,15 @@ void	free_config_and_map(t_config *cfg)
 	}
 }
 
+void free_game_memory(t_game *game)
+{
+    free_config_and_map(&game->cfg);
+    if (game->img.img)
+        mlx_destroy_image(game->mlx, game->img.img);
+    if (game->win)
+        mlx_destroy_window(game->mlx, game->win);
+}
+
 int	ft_atoi(const char *str)
 {
 	int		sign;

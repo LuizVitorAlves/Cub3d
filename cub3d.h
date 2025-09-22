@@ -6,7 +6,7 @@
 /*   By: lalves-d <lalves-d@student.42rio>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/16 19:13:15 by lalves-d          #+#    #+#             */
-/*   Updated: 2025/09/22 08:45:12 by lalves-d         ###   ########.fr       */
+/*   Updated: 2025/09/22 08:53:48 by lalves-d         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -99,6 +99,7 @@ char    *ft_strdup(const char *s);
 char    **copy_map(char **temp_map, int size);
 void    free_config_and_map(t_config *cfg);
 int     ft_atoi(const char *str);
+void    free_game_memory(t_game *game);
 
 // parse_color.c
 int     parse_color(const char *line);
@@ -110,5 +111,8 @@ char    *ft_strtok(char *str, const char *delim);
 //keys.c
 int handle_keys(int keycode, t_game *game);
 int close_window(t_game *game);
+void move_forward_backward(int keycode, t_game *game);
+void move_left_right(int keycode, t_game *game);
+void rotate_camera(int keycode, t_game *game);
 
 #endif
