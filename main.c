@@ -6,7 +6,7 @@
 /*   By: lalves-d <lalves-d@student.42rio>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/22 07:45:48 by lalves-d          #+#    #+#             */
-/*   Updated: 2025/09/22 08:47:09 by lalves-d         ###   ########.fr       */
+/*   Updated: 2025/09/22 13:46:21 by lalves-d         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,7 +49,9 @@ int main(int argc, char **argv)
     init_player(&game);
 
     // Configura os hooks e inicia o loop
-    mlx_loop_hook(game.mlx, render_frame, &game);
+    // mlx_loop_hook(game.mlx, render_frame, &game);
+    mlx_loop_hook(game.mlx, (int (*)())render_frame, &game);
+
     mlx_key_hook(game.win, handle_keys, &game);
     mlx_hook(game.win, 17, 0, close_window, &game);
 

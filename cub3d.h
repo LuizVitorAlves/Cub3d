@@ -6,7 +6,7 @@
 /*   By: lalves-d <lalves-d@student.42rio>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/16 19:13:15 by lalves-d          #+#    #+#             */
-/*   Updated: 2025/09/22 09:08:39 by lalves-d         ###   ########.fr       */
+/*   Updated: 2025/09/22 15:00:27 by lalves-d         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -91,13 +91,15 @@ void    init_player(t_game *game);
 
 // render_utils.c
 void    my_mlx_pixel_put(t_img *data, int x, int y, int color);
-int     render_frame(t_game *game);
+int render_frame(void *param);
 void    draw_wall_slice(t_game *game, int x, double perp_wall_dist, int side);
 int     close_window(t_game *game);
 
 // parse_cub.c
 int     parse_cub_file(char *filename, t_config *config);
 int     validate_map(t_config *cfg);
+int	find_and_validate_player2(t_config *cfg, double *player_x, double *player_y);
+
 
 // parse_utils.c
 int     starts_with(const char *str, const char *prefix);

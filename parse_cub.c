@@ -6,7 +6,7 @@
 /*   By: lalves-d <lalves-d@student.42rio>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/15 08:27:19 by lalves-d          #+#    #+#             */
-/*   Updated: 2025/09/17 16:20:28 by lalves-d         ###   ########.fr       */
+/*   Updated: 2025/09/22 15:23:25 by lalves-d         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -164,6 +164,34 @@ static int	find_and_validate_player(t_config *cfg, int *player_x, int *player_y)
 	return (player_count != 1);
 }
 
+
+
+int	find_and_validate_player2(t_config *cfg, double *player_x, double *player_y)
+{
+	int	i;
+	int	j;
+	int	player_count;
+
+	i = 0;
+	j = 0;
+	player_count = 0;
+	while (cfg->map[i])
+	{
+		j = 0;
+		while (cfg->map[i][j])
+		{
+			if (strchr("NSWE", cfg->map[i][j]))
+			{
+				player_count++;
+				*player_x = j;
+				*player_y = i;
+			}
+			j++;
+		}
+		i++;
+	}
+	return (player_count);
+}
 
 int	validate_map(t_config *cfg)
 {

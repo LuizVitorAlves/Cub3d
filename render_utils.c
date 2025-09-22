@@ -6,7 +6,7 @@
 /*   By: lalves-d <lalves-d@student.42rio>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/17 16:34:17 by lalves-d          #+#    #+#             */
-/*   Updated: 2025/09/21 23:10:36 by lalves-d         ###   ########.fr       */
+/*   Updated: 2025/09/22 13:39:35 by lalves-d         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,8 +20,11 @@ void my_mlx_pixel_put(t_img *data, int x, int y, int color)
     *(unsigned int*)dst = color;
 }
 
-int render_frame(t_game *game)
+int render_frame(void *param)
 {
+     t_game *game;
+
+    game = (t_game *)param;
     raycasting_loop(game);
     mlx_put_image_to_window(game->mlx, game->win, game->img.img, 0, 0);
     return (0);
