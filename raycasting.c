@@ -6,81 +6,73 @@
 /*   By: lalves-d <lalves-d@student.42rio>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/16 19:00:12 by lalves-d          #+#    #+#             */
-/*   Updated: 2025/09/17 16:50:49 by lalves-d         ###   ########.fr       */
+/*   Updated: 2025/09/21 23:07:00 by lalves-d         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "cub3d.h"
 
-void	init_player(t_config *game)
+void init_player(t_game *game)
 {
-	int	y;
-	int	x;
+    int y;
+    int x;
 
-	y = 0;
-	game->player.dir_x = 0;
-	game->player.dir_y = 0;
-	game->player.plane_x = 0;
-	game->player.plane_y = 0;
-	while (y < game->map_height)
-	{
-		x = 0;
-		while (game->map[y][x])
-		{
-			if (game->map[y][x] == 'N' || game->map[y][x] == 'S'
-				|| game->map[y][x] == 'E' || game->map[y][x] == 'W')
-			{
-				game->player.pos_x = x + 0.5;
-				game->player.pos_y = y + 0.5;
-				if (game->map[y][x] == 'N')
-				{
-					game->player.dir_y = -1;
-					game->player.plane_x = 1.0;
-				}
-				else if (game->map[y][x] == 'S')
-				{
-					game->player.dir_y = 1;
-					game->player.plane_x = -1.0;
-				}
-				else if (game->map[y][x] == 'E')
-				{
-					game->player.dir_x = 1;
-					game->player.plane_y = 1.0;
-				}
-				else if (game->map[y][x] == 'W')
-				{
-					game->player.dir_x = -1;
-					game->player.plane_y = -1.0;
-				}
-				game->map[y][x] = '0';
-				return ;
-			}
-			x++;
-		}
-		y++;
-	}
+    y = 0;
+    game->player.dir_x = 0;
+    game->player.dir_y = 0;
+    game->player.plane_x = 0;
+    game->player.plane_y = 0;
+    while (y < game->cfg.map_height)
+    {
+        x = 0;
+        while (game->cfg.map[y][x])
+        {
+            if (game->cfg.map[y][x] == 'N' || game->cfg.map[y][x] == 'S'
+                || game->cfg.map[y][x] == 'E' || game->cfg.map[y][x] == 'W')
+            {
+                game->player.pos_x = x + 0.5;
+                game->player.pos_y = y + 0.5;
+                if (game->cfg.map[y][x] == 'N')
+                {
+                    game->player.dir_y = -1;
+                    game->player.plane_x = 1.0;
+                }
+                else if (game->cfg.map[y][x] == 'S')
+                {
+                    game->player.dir_y = 1;
+                    game->player.plane_x = -1.0;
+                }
+                else if (game->cfg.map[y][x] == 'E')
+                {
+                    game->player.dir_x = 1;
+                    game->player.plane_y = 1.0;
+                }
+                else if (game->cfg.map[y][x] == 'W')
+                {
+                    game->player.dir_x = -1;
+                    game->player.plane_y = -1.0;
+                }
+                game->cfg.map[y][x] = '0';
+                return ;
+            }
+            x++;
+        }
+        y++;
+    }
 }
 
-double calculate_dda(t_config *game, double ray_dir_x, double ray_dir_y, int *side)
+double calculate_dda(t_game *game, double ray_dir_x, double ray_dir_y, int *side)
 {
-    // Posição atual do raio no mapa de grade
     int map_x = (int)game->player.pos_x;
     int map_y = (int)game->player.pos_y;
-
-    // Distância percorrida pelo raio de uma linha de grade para a próxima
-    double delta_dist_x = fabs(1 / ray_dir_x);
-    double delta_dist_y = fabs(1 / ray_dir_y);
-
-    // Distância do jogador até a primeira linha de grade
     double side_dist_x;
     double side_dist_y;
-
-    // Direção do passo no mapa (1 ou -1)
+    double delta_dist_x = fabs(1 / ray_dir_x);
+    double delta_dist_y = fabs(1 / ray_dir_y);
     int step_x;
     int step_y;
     int hit = 0;
 
-    // Calcula o passo inicial e a distância inicial no eixo X
     if (ray_dir_x < 0) {
         step_x = -1;
         side_dist_x = (game->player.pos_x - map_x) * delta_dist_x;
@@ -88,8 +80,6 @@ double calculate_dda(t_config *game, double ray_dir_x, double ray_dir_y, int *si
         step_x = 1;
         side_dist_x = (map_x + 1.0 - game->player.pos_x) * delta_dist_x;
     }
-
-    // Calcula o passo inicial e a distância inicial no eixo Y
     if (ray_dir_y < 0) {
         step_y = -1;
         side_dist_y = (game->player.pos_y - map_y) * delta_dist_y;
@@ -98,24 +88,20 @@ double calculate_dda(t_config *game, double ray_dir_x, double ray_dir_y, int *si
         side_dist_y = (map_y + 1.0 - game->player.pos_y) * delta_dist_y;
     }
 
-    // Loop principal do DDA para encontrar a parede
     while (hit == 0) {
         if (side_dist_x < side_dist_y) {
             side_dist_x += delta_dist_x;
             map_x += step_x;
-            *side = 0; // O raio atingiu uma parede Leste/Oeste
+            *side = 0;
         } else {
             side_dist_y += delta_dist_y;
             map_y += step_y;
-            *side = 1; // O raio atingiu uma parede Norte/Sul
+            *side = 1;
         }
-        
-        // Verifica se o raio bateu em uma parede (caractere '1')
-        if (game->map[map_y][map_x] == '1')
+        if (game->cfg.map[map_y][map_x] == '1')
             hit = 1;
     }
 
-    // Calcula a distância perpendicular para a projeção
     if (*side == 0)
         return (side_dist_x - delta_dist_x);
     else
@@ -132,11 +118,12 @@ void raycasting_loop(t_game *game)
     int draw_end;
     int color;
 
-    for (x = 0; x < SCREEN_WIDTH; x++)
+    x = 0;
+    while (x < SCREEN_WIDTH)
     {
         double camera_x = 2 * x / (double)SCREEN_WIDTH - 1;
-        double ray_dir_x = game->cfg.player.dir_x + game->cfg.player.plane_x * camera_x;
-        double ray_dir_y = game->cfg.player.dir_y + game->cfg.player.plane_y * camera_x;
+        double ray_dir_x = game->player.dir_x + game->player.plane_x * camera_x;
+        double ray_dir_y = game->player.dir_y + game->player.plane_y * camera_x;
 
         perp_wall_dist = calculate_dda(game, ray_dir_x, ray_dir_y, &side);
 
@@ -146,8 +133,13 @@ void raycasting_loop(t_game *game)
         draw_end = (wall_height / 2) + (SCREEN_HEIGHT / 2);
         if (draw_end >= SCREEN_HEIGHT) draw_end = SCREEN_HEIGHT - 1;
 
-        for (int y = 0; y < draw_start; y++)
+        int y;
+        y = 0;
+        while (y < draw_start)
+        {
             my_mlx_pixel_put(&game->img, x, y, game->cfg.ceiling_color);
+            y++;
+        }
 
         if (side == 0 && ray_dir_x > 0)
             color = 0xFF0000;
@@ -158,11 +150,19 @@ void raycasting_loop(t_game *game)
         else
             color = 0xFFFF00;
 
-        for (int y = draw_start; y < draw_end; y++)
+        y = draw_start;
+        while (y < draw_end)
+        {
             my_mlx_pixel_put(&game->img, x, y, color);
+            y++;
+        }
 
-        for (int y = draw_end; y < SCREEN_HEIGHT; y++)
+        y = draw_end;
+        while (y < SCREEN_HEIGHT)
+        {
             my_mlx_pixel_put(&game->img, x, y, game->cfg.floor_color);
+            y++;
+        }
+        x++;
     }
 }
-

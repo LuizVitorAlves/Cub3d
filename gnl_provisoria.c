@@ -10,9 +10,7 @@
 /* */
 /* ************************************************************************** */
 
-#include "cub3d.h"
-#include <unistd.h>
-#include <stdlib.h>
+#include "gnl.h"
 #define BUFFER_SIZE 100000
 
 /*

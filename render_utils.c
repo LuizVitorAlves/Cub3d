@@ -6,7 +6,7 @@
 /*   By: lalves-d <lalves-d@student.42rio>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/17 16:34:17 by lalves-d          #+#    #+#             */
-/*   Updated: 2025/09/17 16:34:34 by lalves-d         ###   ########.fr       */
+/*   Updated: 2025/09/21 23:10:36 by lalves-d         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,6 +33,7 @@ void draw_wall_slice(t_game *game, int x, double perp_wall_dist, int side)
     int draw_start;
     int draw_end;
     int color;
+    int y;
 
     wall_height = (int)(SCREEN_HEIGHT / perp_wall_dist);
     draw_start = (-wall_height / 2) + (SCREEN_HEIGHT / 2);
@@ -41,15 +42,30 @@ void draw_wall_slice(t_game *game, int x, double perp_wall_dist, int side)
     draw_end = (wall_height / 2) + (SCREEN_HEIGHT / 2);
     if (draw_end >= SCREEN_HEIGHT)
         draw_end = SCREEN_HEIGHT - 1;
-    for (int y = 0; y < draw_start; y++)
+
+    y = 0;
+    while (y < draw_start)
+    {
         my_mlx_pixel_put(&game->img, x, y, game->cfg.ceiling_color);
+        y++;
+    }
+
     if (side == 0)
         color = 0xFF0000;
     else
         color = 0x00FF00;
-    for (int y = draw_start; y < draw_end; y++)
-        my_mlx_pixel_put(&game->img, x, y, color);
 
-    for (int y = draw_end; y < SCREEN_HEIGHT; y++)
+    y = draw_start;
+    while (y < draw_end)
+    {
+        my_mlx_pixel_put(&game->img, x, y, color);
+        y++;
+    }
+
+    y = draw_end;
+    while (y < SCREEN_HEIGHT)
+    {
         my_mlx_pixel_put(&game->img, x, y, game->cfg.floor_color);
+        y++;
+    }
 }
