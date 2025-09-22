@@ -6,9 +6,12 @@
 /*   By: lalves-d <lalves-d@student.42rio>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/22 07:45:48 by lalves-d          #+#    #+#             */
-/*   Updated: 2025/09/22 07:45:51 by lalves-d         ###   ########.fr       */
+/*   Updated: 2025/09/22 08:47:09 by lalves-d         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
+
+#include "cub3d.h"
+#include <string.h>
 
 #include "cub3d.h"
 #include <string.h>
@@ -22,11 +25,11 @@ int main(int argc, char **argv)
         printf("Uso: ./cub3d mapa.cub\n");
         return (1);
     }
-    // Inicializa a estrutura do jogo
     memset(&game, 0, sizeof(t_game));
     if (parse_cub_file(argv[1], &game.cfg))
     {
-        // Aqui, a função de cleanup da t_game seria chamada
+        // Se o parsing falhar, a memória precisa ser liberada.
+        free_game_memory(&game);
         return (1);
     }
     
@@ -52,6 +55,9 @@ int main(int argc, char **argv)
 
     // Inicia o loop principal
     mlx_loop(game.mlx);
+
+    // Libera a memória quando o loop termina
+    free_game_memory(&game);
 
     return (0);
 }
