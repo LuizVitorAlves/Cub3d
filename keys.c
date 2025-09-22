@@ -6,7 +6,7 @@
 /*   By: lalves-d <lalves-d@student.42rio>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/22 07:22:19 by lalves-d          #+#    #+#             */
-/*   Updated: 2025/09/22 08:58:31 by lalves-d         ###   ########.fr       */
+/*   Updated: 2025/09/22 09:08:20 by lalves-d         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -66,11 +66,11 @@ int handle_keys(int keycode, t_game *game)
     printf("Tecla pressionada, keycode: %d\n", keycode);
     if (keycode == 65307)
         close_window(game);
-    if (keycode == 13 || keycode == 1)
+    if (keycode == 119 || keycode == 115)
         move_forward_backward(keycode, game);
-    if (keycode == 0 || keycode == 2)
+    if (keycode == 97 || keycode == 100)
         move_left_right(keycode, game);
-    if (keycode == 123 || keycode == 124)
+    if (keycode == 65361 || keycode == 65363)
         rotate_camera(keycode, game);
     return (0);
 }

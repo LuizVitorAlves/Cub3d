@@ -6,7 +6,7 @@
 /*   By: lalves-d <lalves-d@student.42rio>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/16 19:13:15 by lalves-d          #+#    #+#             */
-/*   Updated: 2025/09/22 08:53:48 by lalves-d         ###   ########.fr       */
+/*   Updated: 2025/09/22 09:08:39 by lalves-d         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -76,6 +76,12 @@ typedef struct s_game
     t_img       img;
     t_config    cfg;
     t_player    player;
+    /*int key_w_pressed;
+    int key_a_pressed;
+    int key_s_pressed;
+    int key_d_pressed;
+    int key_left_pressed;
+    int key_right_pressed;*/
 }   t_game;
 
 // raycasting.c
