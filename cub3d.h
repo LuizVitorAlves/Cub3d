@@ -6,7 +6,7 @@
 /*   By: lalves-d <lalves-d@student.42rio>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/16 19:13:15 by lalves-d          #+#    #+#             */
-/*   Updated: 2025/09/22 06:58:40 by lalves-d         ###   ########.fr       */
+/*   Updated: 2025/09/22 07:15:24 by lalves-d         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -77,7 +77,7 @@ typedef struct s_game
 
 // raycasting.c
 void    raycasting_loop(t_game *game);
-double  calculate_dda(t_game *game, double ray_dir_x, double ray_dir_y, int *side);
+double calculate_dda(t_game *game, double ray_dir_x, double ray_dir_y, int *side);
 void    init_player(t_game *game);
 
 // render_utils.c

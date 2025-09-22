@@ -6,7 +6,7 @@
 /*   By: lalves-d <lalves-d@student.42rio>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/16 19:00:12 by lalves-d          #+#    #+#             */
-/*   Updated: 2025/09/21 23:07:00 by lalves-d         ###   ########.fr       */
+/*   Updated: 2025/09/22 07:11:33 by lalves-d         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -118,8 +118,7 @@ void raycasting_loop(t_game *game)
     int draw_end;
     int color;
 
-    x = 0;
-    while (x < SCREEN_WIDTH)
+    for (x = 0; x < SCREEN_WIDTH; x++)
     {
         double camera_x = 2 * x / (double)SCREEN_WIDTH - 1;
         double ray_dir_x = game->player.dir_x + game->player.plane_x * camera_x;
@@ -133,13 +132,8 @@ void raycasting_loop(t_game *game)
         draw_end = (wall_height / 2) + (SCREEN_HEIGHT / 2);
         if (draw_end >= SCREEN_HEIGHT) draw_end = SCREEN_HEIGHT - 1;
 
-        int y;
-        y = 0;
-        while (y < draw_start)
-        {
+        for (int y = 0; y < draw_start; y++)
             my_mlx_pixel_put(&game->img, x, y, game->cfg.ceiling_color);
-            y++;
-        }
 
         if (side == 0 && ray_dir_x > 0)
             color = 0xFF0000;
@@ -150,19 +144,10 @@ void raycasting_loop(t_game *game)
         else
             color = 0xFFFF00;
 
-        y = draw_start;
-        while (y < draw_end)
-        {
+        for (int y = draw_start; y < draw_end; y++)
             my_mlx_pixel_put(&game->img, x, y, color);
-            y++;
-        }
 
-        y = draw_end;
-        while (y < SCREEN_HEIGHT)
-        {
+        for (int y = draw_end; y < SCREEN_HEIGHT; y++)
             my_mlx_pixel_put(&game->img, x, y, game->cfg.floor_color);
-            y++;
-        }
-        x++;
     }
 }

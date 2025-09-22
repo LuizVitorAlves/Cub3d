@@ -15,34 +15,41 @@
 
 int main(int argc, char **argv)
 {
-    t_config cfg;
-    int i;
+    t_game  game;
 
     if (argc != 2)
     {
         printf("Uso: ./cub3d mapa.cub\n");
         return (1);
     }
-    memset(&cfg, 0, sizeof(t_config));
-    if (parse_cub_file(argv[1], &cfg))
+    // Inicializa a estrutura e faz o parsing
+    memset(&game.cfg, 0, sizeof(t_config));
+    if (parse_cub_file(argv[1], &game.cfg))
     {
-        free_config_and_map(&cfg);
+        // free_config_and_map(&game.cfg);
+        // O main agora chama uma função de cleanup para a t_game
         return (1);
     }
+    
+    // Inicializa a miniLibX
+    game.mlx = mlx_init();
+    if (!game.mlx) return (1);
+    
+    // Cria a janela
+    game.win = mlx_new_window(game.mlx, SCREEN_WIDTH, SCREEN_HEIGHT, "cub3D");
+    if (!game.win) return (1);
 
-    printf("NO: %s\n", cfg.no_path);
-    printf("SO: %s\n", cfg.so_path);
-    printf("WE: %s\n", cfg.we_path);
-    printf("EA: %s\n", cfg.ea_path);
-    printf("F: %d\n", cfg.floor_color);
-    printf("C: %d\n", cfg.ceiling_color);
-    printf("\n--- MAPA ---\n");
-    i = 0;
-    while (cfg.map && cfg.map[i])
-        printf("%s", cfg.map[i++]);
-    printf("\n");
-    
-    free_config_and_map(&cfg);
-    
+    // Cria a imagem
+    game.img.img = mlx_new_image(game.mlx, SCREEN_WIDTH, SCREEN_HEIGHT);
+    game.img.addr = mlx_get_data_addr(game.img.img, &game.img.bpp, &game.img.line_len, &game.img.endian);
+
+    // Inicializa o jogador
+    init_player(&game);
+
+    // Configura os hooks e inicia o loop
+    mlx_loop_hook(game.mlx, render_frame, &game);
+    // ...
+    mlx_loop(game.mlx);
+
     return (0);
 }
