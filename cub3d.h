@@ -6,7 +6,7 @@
 /*   By: lalves-d <lalves-d@student.42rio>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/16 19:13:15 by lalves-d          #+#    #+#             */
-/*   Updated: 2025/09/22 07:28:28 by lalves-d         ###   ########.fr       */
+/*   Updated: 2025/09/22 08:45:12 by lalves-d         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,6 +28,9 @@
 # define SCREEN_WIDTH 640
 # define SCREEN_HEIGHT 480
 # define FOV 90
+# define MOVE_SPEED 0.1
+# define ROT_SPEED 0.05
+
 
 // Estrutura para o jogador
 typedef struct s_player
