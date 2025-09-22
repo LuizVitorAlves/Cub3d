@@ -6,7 +6,7 @@
 /*   By: lalves-d <lalves-d@student.42rio>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/16 19:13:15 by lalves-d          #+#    #+#             */
-/*   Updated: 2025/09/21 23:14:14 by lalves-d         ###   ########.fr       */
+/*   Updated: 2025/09/22 06:46:49 by lalves-d         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,7 +20,7 @@
 # include <string.h>
 # include <stddef.h>
 # include <math.h>
-# include "mlx.h"
+# include "./minilibx-linux/mlx.h"
 # include "gnl.h"
 
 # define MAX_MAP_LINES 1024
