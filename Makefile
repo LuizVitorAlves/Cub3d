@@ -21,7 +21,8 @@ SRCS = \
 	parse_color.c \
 	tokenizador.c \
 	raycasting.c \
-	render_utils.c
+	render_utils.c \
+	keys.c
 
 # Arquivos fontes da parte de bônus
 SRCS_BONUS = 
@@ -58,7 +59,7 @@ clean:
 # Limpa tudo, inclusive o executável
 fclean: clean
 	rm -f $(NAME) $(NAME)_bonus
-	$(MAKE) -C $(MLX_DIR) fclean
+	$(MAKE) -C $(MLX_DIR) clean
 
 # Recompila do zero
 re: fclean all

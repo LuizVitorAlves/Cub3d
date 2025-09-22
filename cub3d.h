@@ -6,7 +6,7 @@
 /*   By: lalves-d <lalves-d@student.42rio>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/16 19:13:15 by lalves-d          #+#    #+#             */
-/*   Updated: 2025/09/22 07:15:24 by lalves-d         ###   ########.fr       */
+/*   Updated: 2025/09/22 07:28:28 by lalves-d         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -103,5 +103,9 @@ char    *skip_spaces(char *str);
 
 // tokenizador.c
 char    *ft_strtok(char *str, const char *delim);
+
+//keys.c
+int handle_keys(int keycode, t_game *game);
+int close_window(t_game *game);
 
 #endif

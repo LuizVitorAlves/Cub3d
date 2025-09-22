@@ -1,13 +1,13 @@
 /* ************************************************************************** */
-/* */
-/* :::      ::::::::   */
-/* main.c                                             :+:      :+:    :+:   */
-/* +:+ +:+         +:+     */
-/* By: lalves-d <lalves-d@student.42.fr>          +#+  +:+       +#+        */
-/* +#+#+#+#+#+   +#+           */
-/* Created: 2025/07/15 15:00:28 by lalves-d          #+#    #+#             */
-/* Updated: 2025/07/15 16:12:15 by lalves-d         ###   ########.fr       */
-/* */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   main.c                                             :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: lalves-d <lalves-d@student.42rio>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025/09/22 07:45:48 by lalves-d          #+#    #+#             */
+/*   Updated: 2025/09/22 07:45:51 by lalves-d         ###   ########.fr       */
+/*                                                                            */
 /* ************************************************************************** */
 
 #include "cub3d.h"
@@ -22,12 +22,11 @@ int main(int argc, char **argv)
         printf("Uso: ./cub3d mapa.cub\n");
         return (1);
     }
-    // Inicializa a estrutura e faz o parsing
-    memset(&game.cfg, 0, sizeof(t_config));
+    // Inicializa a estrutura do jogo
+    memset(&game, 0, sizeof(t_game));
     if (parse_cub_file(argv[1], &game.cfg))
     {
-        // free_config_and_map(&game.cfg);
-        // O main agora chama uma função de cleanup para a t_game
+        // Aqui, a função de cleanup da t_game seria chamada
         return (1);
     }
     
@@ -48,7 +47,10 @@ int main(int argc, char **argv)
 
     // Configura os hooks e inicia o loop
     mlx_loop_hook(game.mlx, render_frame, &game);
-    // ...
+    mlx_key_hook(game.win, handle_keys, &game);
+    mlx_hook(game.win, 17, 0, close_window, &game);
+
+    // Inicia o loop principal
     mlx_loop(game.mlx);
 
     return (0);
