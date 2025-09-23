@@ -6,7 +6,7 @@
 /*   By: lalves-d <lalves-d@student.42rio>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/22 07:22:19 by lalves-d          #+#    #+#             */
-/*   Updated: 2025/09/22 23:25:27 by lalves-d         ###   ########.fr       */
+/*   Updated: 2025/09/23 01:35:34 by lalves-d         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -113,19 +113,29 @@ int close_window(t_game *game)
 
 int mouse_move_hook(int x, int y, t_game *game)
 {
-    static int last_x = -1;
+    int center_x = SCREEN_WIDTH / 2;
+    int center_y = SCREEN_HEIGHT / 2;
     double rot_speed;
+    double old_dir_x;
+    double old_plane_x;
 
-    (void)y;
-    if (last_x == -1)
-        last_x = SCREEN_WIDTH / 2;
-    rot_speed = (x - last_x) * ROT_SPEED_MOUSE;
-    double old_dir_x = game->player.dir_x;
-    double old_plane_x = game->player.plane_x;
+    (void)y; // ignorando o y se não for usar
+
+    // calcular o quanto o mouse se moveu horizontalmente desde o centro
+    rot_speed = (x - center_x) * ROT_SPEED_MOUSE;
+
+    // atualizar direção do player
+    old_dir_x = game->player.dir_x;
+    old_plane_x = game->player.plane_x;
     game->player.dir_x = old_dir_x * cos(rot_speed) - game->player.dir_y * sin(rot_speed);
     game->player.dir_y = old_dir_x * sin(rot_speed) + game->player.dir_y * cos(rot_speed);
     game->player.plane_x = old_plane_x * cos(rot_speed) - game->player.plane_y * sin(rot_speed);
     game->player.plane_y = old_plane_x * sin(rot_speed) + game->player.plane_y * cos(rot_speed);
-    last_x = x;
+
+    // resetar o cursor para o centro da tela (permite rotação 360°)
+    mlx_mouse_move(game->mlx, game->win, center_x, center_y);
+
     return (0);
 }
+
+
