@@ -6,7 +6,7 @@
 /*   By: lalves-d <lalves-d@student.42rio>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/22 07:45:48 by lalves-d          #+#    #+#             */
-/*   Updated: 2025/09/22 13:46:21 by lalves-d         ###   ########.fr       */
+/*   Updated: 2025/09/22 21:52:34 by lalves-d         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,8 +54,7 @@ int main(int argc, char **argv)
 
     mlx_key_hook(game.win, handle_keys, &game);
     mlx_hook(game.win, 17, 0, close_window, &game);
-
-    // Inicia o loop principal
+    mlx_hook(game.win, 6, 1L<<6, mouse_move_hook, &game);
     mlx_loop(game.mlx);
 
     // Libera a memória quando o loop termina
