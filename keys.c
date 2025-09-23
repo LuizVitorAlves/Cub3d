@@ -6,7 +6,7 @@
 /*   By: lalves-d <lalves-d@student.42rio>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/22 07:22:19 by lalves-d          #+#    #+#             */
-/*   Updated: 2025/09/22 21:48:27 by lalves-d         ###   ########.fr       */
+/*   Updated: 2025/09/22 23:25:27 by lalves-d         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -86,6 +86,10 @@ void rotate_camera(int keycode, t_game *game)
     }
 }
 
+int handle_key_press(int keycode, t_game *game){
+    handle_keys(keycode,game);
+    return(0);
+}
 int handle_keys(int keycode, t_game *game)
 {
     printf("Tecla pressionada, keycode: %d\n", keycode);

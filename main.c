@@ -6,7 +6,7 @@
 /*   By: lalves-d <lalves-d@student.42rio>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/22 07:45:48 by lalves-d          #+#    #+#             */
-/*   Updated: 2025/09/22 21:52:34 by lalves-d         ###   ########.fr       */
+/*   Updated: 2025/09/22 23:32:29 by lalves-d         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,7 +52,13 @@ int main(int argc, char **argv)
     // mlx_loop_hook(game.mlx, render_frame, &game);
     mlx_loop_hook(game.mlx, (int (*)())render_frame, &game);
 
-    mlx_key_hook(game.win, handle_keys, &game);
+
+
+    
+	mlx_hook(game.win, 2, 1L << 0, handle_key_press, &game);    // KeyPress
+
+    
+    //mlx_key_hook(game.win, handle_keys, &game);
     mlx_hook(game.win, 17, 0, close_window, &game);
     mlx_hook(game.win, 6, 1L<<6, mouse_move_hook, &game);
     mlx_loop(game.mlx);

@@ -6,7 +6,7 @@
 /*   By: lalves-d <lalves-d@student.42rio>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/16 19:13:15 by lalves-d          #+#    #+#             */
-/*   Updated: 2025/09/22 21:51:38 by lalves-d         ###   ########.fr       */
+/*   Updated: 2025/09/22 23:24:55 by lalves-d         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -122,5 +122,10 @@ void move_forward_backward(int keycode, t_game *game);
 void move_left_right(int keycode, t_game *game);
 void rotate_camera(int keycode, t_game *game);
 int mouse_move_hook(int x, int y, t_game *game);
+
+int handle_key_press(int keycode, t_game *game);
+
+
+
 
 #endif
