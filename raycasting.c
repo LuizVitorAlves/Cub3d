@@ -6,7 +6,7 @@
 /*   By: lalves-d <lalves-d@student.42rio>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/16 19:00:12 by lalves-d          #+#    #+#             */
-/*   Updated: 2025/09/22 07:11:33 by lalves-d         ###   ########.fr       */
+/*   Updated: 2025/10/07 12:13:27 by lalves-d         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -61,7 +61,7 @@ void init_player(t_game *game)
     }
 }
 
-double calculate_dda(t_game *game, double ray_dir_x, double ray_dir_y, int *side)
+double calculate_dda(t_game *game, double ray_dir_x, double ray_dir_y, int *side, char *hit_char)
 {
     int map_x = (int)game->player.pos_x;
     int map_y = (int)game->player.pos_y;
@@ -73,33 +73,47 @@ double calculate_dda(t_game *game, double ray_dir_x, double ray_dir_y, int *side
     int step_y;
     int hit = 0;
 
-    if (ray_dir_x < 0) {
+    if (ray_dir_x < 0)
+    {
         step_x = -1;
         side_dist_x = (game->player.pos_x - map_x) * delta_dist_x;
-    } else {
+    }
+    else
+    {
         step_x = 1;
         side_dist_x = (map_x + 1.0 - game->player.pos_x) * delta_dist_x;
     }
-    if (ray_dir_y < 0) {
+    if (ray_dir_y < 0)
+    {
         step_y = -1;
         side_dist_y = (game->player.pos_y - map_y) * delta_dist_y;
-    } else {
+    }
+    else
+    {
         step_y = 1;
         side_dist_y = (map_y + 1.0 - game->player.pos_y) * delta_dist_y;
     }
 
-    while (hit == 0) {
-        if (side_dist_x < side_dist_y) {
+    while (!hit)
+    {
+        if (side_dist_x < side_dist_y)
+        {
             side_dist_x += delta_dist_x;
             map_x += step_x;
             *side = 0;
-        } else {
+        }
+        else
+        {
             side_dist_y += delta_dist_y;
             map_y += step_y;
             *side = 1;
         }
-        if (game->cfg.map[map_y][map_x] == '1')
+
+        if (game->cfg.map[map_y][map_x] == '1' || game->cfg.map[map_y][map_x] == 'D')
+        {
+            *hit_char = game->cfg.map[map_y][map_x];
             hit = 1;
+        }
     }
 
     if (*side == 0)
@@ -117,6 +131,7 @@ void raycasting_loop(t_game *game)
     int draw_start;
     int draw_end;
     int color;
+    char hit_char;
 
     for (x = 0; x < SCREEN_WIDTH; x++)
     {
@@ -124,18 +139,22 @@ void raycasting_loop(t_game *game)
         double ray_dir_x = game->player.dir_x + game->player.plane_x * camera_x;
         double ray_dir_y = game->player.dir_y + game->player.plane_y * camera_x;
 
-        perp_wall_dist = calculate_dda(game, ray_dir_x, ray_dir_y, &side);
+        perp_wall_dist = calculate_dda(game, ray_dir_x, ray_dir_y, &side, &hit_char);
 
         wall_height = (int)(SCREEN_HEIGHT / perp_wall_dist);
         draw_start = (-wall_height / 2) + (SCREEN_HEIGHT / 2);
-        if (draw_start < 0) draw_start = 0;
+        if (draw_start < 0)
+            draw_start = 0;
         draw_end = (wall_height / 2) + (SCREEN_HEIGHT / 2);
-        if (draw_end >= SCREEN_HEIGHT) draw_end = SCREEN_HEIGHT - 1;
+        if (draw_end >= SCREEN_HEIGHT)
+            draw_end = SCREEN_HEIGHT - 1;
 
         for (int y = 0; y < draw_start; y++)
             my_mlx_pixel_put(&game->img, x, y, game->cfg.ceiling_color);
 
-        if (side == 0 && ray_dir_x > 0)
+        if (hit_char == 'D')
+            color = 0xAA6600;
+        else if (side == 0 && ray_dir_x > 0)
             color = 0xFF0000;
         else if (side == 0 && ray_dir_x < 0)
             color = 0x00FF00;

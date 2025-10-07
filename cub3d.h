@@ -6,7 +6,7 @@
 /*   By: lalves-d <lalves-d@student.42rio>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/16 19:13:15 by lalves-d          #+#    #+#             */
-/*   Updated: 2025/09/22 23:24:55 by lalves-d         ###   ########.fr       */
+/*   Updated: 2025/10/07 12:03:20 by lalves-d         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -77,17 +77,20 @@ typedef struct s_game
     t_img       img;
     t_config    cfg;
     t_player    player;
-    /*int key_w_pressed;
-    int key_a_pressed;
-    int key_s_pressed;
-    int key_d_pressed;
-    int key_left_pressed;
-    int key_right_pressed;*/
 }   t_game;
+
+// Estrutura da porta
+typedef struct s_door
+{
+    int     map_x;
+    int     map_y;
+    double  state;
+    int     is_open;
+}   t_door;
 
 // raycasting.c
 void    raycasting_loop(t_game *game);
-double calculate_dda(t_game *game, double ray_dir_x, double ray_dir_y, int *side);
+double calculate_dda(t_game *game, double ray_dir_x, double ray_dir_y, int *side, char *hit_char);
 void    init_player(t_game *game);
 
 // render_utils.c
@@ -122,10 +125,9 @@ void move_forward_backward(int keycode, t_game *game);
 void move_left_right(int keycode, t_game *game);
 void rotate_camera(int keycode, t_game *game);
 int mouse_move_hook(int x, int y, t_game *game);
-
 int handle_key_press(int keycode, t_game *game);
 
-
-
+//door.c
+void    interact_door(t_game *game);
 
 #endif

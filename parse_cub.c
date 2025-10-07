@@ -6,36 +6,37 @@
 /*   By: lalves-d <lalves-d@student.42rio>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/15 08:27:19 by lalves-d          #+#    #+#             */
-/*   Updated: 2025/09/22 17:26:01 by lalves-d         ###   ########.fr       */
+/*   Updated: 2025/10/07 12:12:55 by lalves-d         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "cub3d.h"
 
-static int	is_map_line(const char *line)
+static int  is_map_line(const char *line)
 {
-	int	i;
-	int	has_map_char;
+    int i;
+    int has_map_char;
 
-	i = 0;
-	has_map_char = 0;
-	while (line[i] == ' ')
-		i++;
-	if (line[i] == '\0' || line[i] == '\n')
-		return (0);
-	while (line[i] && line[i] != '\n')
-	{
-		if (line[i] != '1' && line[i] != '0' && line[i] != ' ' && line[i] != 'N'
-			&& line[i] != 'S' && line[i] != 'E' && line[i] != 'W')
-			return (-1);
-		if (line[i] == '1' || line[i] == '0' || line[i] == 'N' || line[i] == 'S'
-			|| line[i] == 'E' || line[i] == 'W')
-			has_map_char = 1;
-		i++;
-	}
-	return (has_map_char);
+    i = 0;
+    has_map_char = 0;
+    while (line[i] == ' ')
+        i++;
+    if (line[i] == '\0' || line[i] == '\n')
+        return (0);
+    while (line[i] && line[i] != '\n')
+    {
+        if (line[i] != '1' && line[i] != '0' && line[i] != ' ' && line[i] != 'N'
+            && line[i] != 'S' && line[i] != 'E' && line[i] != 'W'
+            && line[i] != 'D' && line[i] != 'd')
+            return (-1);
+        if (line[i] == '1' || line[i] == '0' || line[i] == 'N' || line[i] == 'S'
+            || line[i] == 'E' || line[i] == 'W'
+            || line[i] == 'D' || line[i] == 'd')
+            has_map_char = 1;
+        i++;
+    }
+    return (has_map_char);
 }
-
 static char	**get_target_path(char *line, t_config *cfg)
 {
 	if (starts_with(line, "NO "))
@@ -112,29 +113,29 @@ static int	parse_config_line(char *line, t_config *cfg)
 	return (1);
 }
 
-static void	flood_fill(char **map, int x, int y, int max_x, int max_y,
-		int *is_valid)
+static void flood_fill(char **map, int x, int y, int max_x, int max_y,
+        int *is_valid)
 {
-	char	c;
+    char    c;
 
-	if (x < 0 || y < 0 || y >= max_y)
-	{
-		*is_valid = 0;
-		return ;
-	}
-	if (x >= (int)strlen(map[y]) || map[y][x] == ' ')
-	{
-		*is_valid = 0;
-		return ;
-	}
-	c = map[y][x];
-	if (c == '1' || c == 'V')
-		return ;
-	map[y][x] = 'V';
-	flood_fill(map, x + 1, y, max_x, max_y, is_valid);
-	flood_fill(map, x - 1, y, max_x, max_y, is_valid);
-	flood_fill(map, x, y + 1, max_x, max_y, is_valid);
-	flood_fill(map, x, y - 1, max_x, max_y, is_valid);
+    if (x < 0 || y < 0 || y >= max_y)
+    {
+        *is_valid = 0;
+        return ;
+    }
+    if (x >= (int)strlen(map[y]) || map[y][x] == ' ')
+    {
+        *is_valid = 0;
+        return ;
+    }
+    c = map[y][x];
+    if (c == '1' || c == 'D' || c == 'V')
+        return ;
+    map[y][x] = 'V';
+    flood_fill(map, x + 1, y, max_x, max_y, is_valid);
+    flood_fill(map, x - 1, y, max_x, max_y, is_valid);
+    flood_fill(map, x, y + 1, max_x, max_y, is_valid);
+    flood_fill(map, x, y - 1, max_x, max_y, is_valid);
 }
 
 static int	find_and_validate_player(t_config *cfg, int *player_x, int *player_y)

@@ -6,15 +6,11 @@
 /*   By: lalves-d <lalves-d@student.42rio>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/22 07:45:48 by lalves-d          #+#    #+#             */
-/*   Updated: 2025/09/23 01:40:32 by lalves-d         ###   ########.fr       */
+/*   Updated: 2025/10/07 12:11:21 by lalves-d         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "cub3d.h"
-#include <string.h>
-
-#include "cub3d.h"
-#include <string.h>
 
 int main(int argc, char **argv)
 {
