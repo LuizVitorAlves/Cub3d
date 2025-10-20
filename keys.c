@@ -6,7 +6,7 @@
 /*   By: lalves-d <lalves-d@student.42rio>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/22 07:22:19 by lalves-d          #+#    #+#             */
-/*   Updated: 2025/10/07 12:10:54 by lalves-d         ###   ########.fr       */
+/*   Updated: 2025/10/20 11:25:04 by lalves-d         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -102,7 +102,10 @@ int handle_keys(int keycode, t_game *game)
     if (keycode == 65361 || keycode == 65363)
         rotate_camera(keycode, game);
     if (keycode == 32)
+    {
         interact_door(game);
+        gun_start_anim(&game->gun);
+    }
     return (0);
 }
 

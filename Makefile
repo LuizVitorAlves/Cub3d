@@ -23,7 +23,8 @@ SRCS = \
 	raycasting.c \
 	render_utils.c \
 	keys.c \
-	door.c
+	door.c \
+	sprite.c
 
 # Arquivos fontes da parte de bônus
 SRCS_BONUS = 

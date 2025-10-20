@@ -6,7 +6,7 @@
 /*   By: lalves-d <lalves-d@student.42rio>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/16 19:13:15 by lalves-d          #+#    #+#             */
-/*   Updated: 2025/10/07 12:03:20 by lalves-d         ###   ########.fr       */
+/*   Updated: 2025/10/20 12:08:07 by lalves-d         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,7 +31,23 @@
 # define MOVE_SPEED 0.1
 # define ROT_SPEED 0.05
 # define ROT_SPEED_MOUSE 0.005
+#define GUN_FRAMES 5
+#define GUN_ANIM_SPEED 10
 
+// Estrutura da arma
+typedef struct s_gun
+{
+    void    *frames[GUN_FRAMES];
+    char    *addr[GUN_FRAMES];
+    int     bpp;
+    int     line_len;
+    int     endian;
+    int     current;
+    int     animating;
+    int     counter;
+    int     width;
+    int     height;
+}   t_gun;
 
 // Estrutura para o jogador
 typedef struct s_player
@@ -77,6 +93,7 @@ typedef struct s_game
     t_img       img;
     t_config    cfg;
     t_player    player;
+    t_gun       gun;
 }   t_game;
 
 // Estrutura da porta
@@ -129,5 +146,11 @@ int handle_key_press(int keycode, t_game *game);
 
 //door.c
 void    interact_door(t_game *game);
+//sprite.c
+void    gun_update(t_gun *gun);
+void    gun_start_anim(t_gun *gun);
+void    gun_load(t_game *game);
+void    gun_draw(t_game *game);
+void    cleanup_on_gun_error(t_game *game, char *error_msg);
 
 #endif
