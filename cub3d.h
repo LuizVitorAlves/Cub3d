@@ -6,7 +6,7 @@
 /*   By: lalves-d <lalves-d@student.42rio>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/16 19:13:15 by lalves-d          #+#    #+#             */
-/*   Updated: 2025/10/20 12:08:07 by lalves-d         ###   ########.fr       */
+/*   Updated: 2025/10/20 13:02:10 by lalves-d         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,15 +33,12 @@
 # define ROT_SPEED_MOUSE 0.005
 #define GUN_FRAMES 5
 #define GUN_ANIM_SPEED 10
+#define GUN_SCALE 1.5
 
 // Estrutura da arma
 typedef struct s_gun
 {
     void    *frames[GUN_FRAMES];
-    char    *addr[GUN_FRAMES];
-    int     bpp;
-    int     line_len;
-    int     endian;
     int     current;
     int     animating;
     int     counter;

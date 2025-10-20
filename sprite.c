@@ -6,7 +6,7 @@
 /*   By: lalves-d <lalves-d@student.42rio>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/20 10:51:29 by lalves-d          #+#    #+#             */
-/*   Updated: 2025/10/20 12:02:55 by lalves-d         ###   ########.fr       */
+/*   Updated: 2025/10/20 13:17:20 by lalves-d         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,10 +45,7 @@ void    gun_load(t_game *game)
     {
         gun->frames[i] = mlx_xpm_file_to_image(game->mlx, paths[i], &gun->width, &gun->height);
         if (!gun->frames[i])
-            cleanup_on_gun_error(game, "Falha ao carregar sprite da arma");
-        gun->addr[i] = mlx_get_data_addr(gun->frames[i], &gun->bpp, &gun->line_len, &gun->endian);
-        if (!gun->addr[i])
-            cleanup_on_gun_error(game, "Falha ao obter data_addr do sprite");
+            cleanup_on_gun_error(game, paths[i]);
         i++;
     }
     gun->current = 0;
@@ -86,27 +83,36 @@ void    gun_update(t_gun *gun)
 
 void    gun_draw(t_game *game)
 {
-    int             x;
-    int             y;
-    int             color;
-    char            *src_pixel;
-    char            *dst_pixel;
-    int             screen_x_start;
-    
-    char *src_addr = game->gun.addr[game->gun.current];
-    screen_x_start = (SCREEN_WIDTH / 2) - (game->gun.width / 2);
+    int     x, y, color;
+    char    *src_addr;
+    int     bpp, line_len, endian;
+    void    *current_img_ptr;
+    int     scaled_width, scaled_height;
+
+    current_img_ptr = game->gun.frames[game->gun.current];
+    if (!current_img_ptr)
+        return;
+    src_addr = mlx_get_data_addr(current_img_ptr, &bpp, &line_len, &endian);
+    if (!src_addr)
+        return;
+    scaled_width = (int)(game->gun.width * GUN_SCALE);
+    scaled_height = (int)(game->gun.height * GUN_SCALE);
     y = 0;
-    while (y < game->gun.height)
+    while (y < scaled_height)
     {
         x = 0;
-        while (x < game->gun.width)
+        while (x < scaled_width)
         {
-            src_pixel = src_addr + (y * game->gun.line_len + x * (game->gun.bpp / 8));
-            color = *(unsigned int *)src_pixel;
-            if (color != 0x000000)
+            int src_x = (int)(x / GUN_SCALE);
+            int src_y = (int)(y / GUN_SCALE);
+            color = *(unsigned int*)(src_addr + (src_y * line_len + src_x * (bpp / 8)));
+            if (color != 0xFF00FF)
             {
-                dst_pixel = game->img.addr + ((SCREEN_HEIGHT - game->gun.height + y) * game->img.line_len + (screen_x_start + x) * (game->img.bpp / 8));
-                *(unsigned int *)dst_pixel = color;
+                int screen_x = (SCREEN_WIDTH / 2) - (scaled_width / 2) + x;
+                int screen_y = SCREEN_HEIGHT - scaled_height + y;
+                
+                if (screen_x >= 0 && screen_x < SCREEN_WIDTH && screen_y >= 0 && screen_y < SCREEN_HEIGHT)
+                    my_mlx_pixel_put(&game->img, screen_x, screen_y, color);
             }
             x++;
         }
