@@ -6,7 +6,7 @@
 /*   By: lalves-d <lalves-d@student.42rio>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/16 19:13:15 by lalves-d          #+#    #+#             */
-/*   Updated: 2025/10/20 13:02:10 by lalves-d         ###   ########.fr       */
+/*   Updated: 2025/11/02 13:59:40 by lalves-d         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,6 +34,13 @@
 #define GUN_FRAMES 5
 #define GUN_ANIM_SPEED 10
 #define GUN_SCALE 1.5
+#define TILE_SIZE 10
+#define PLAYER_SIZE 4
+#define DIR_LINE_LEN 15
+#define C_PLAYER 0xFF0000
+#define C_WALL   0xFFFFFF
+#define C_FLOOR  0x444444
+#define C_DIR    0xFF0000
 
 // Estrutura da arma
 typedef struct s_gun
@@ -143,11 +150,15 @@ int handle_key_press(int keycode, t_game *game);
 
 //door.c
 void    interact_door(t_game *game);
+
 //sprite.c
 void    gun_update(t_gun *gun);
 void    gun_start_anim(t_gun *gun);
 void    gun_load(t_game *game);
 void    gun_draw(t_game *game);
 void    cleanup_on_gun_error(t_game *game, char *error_msg);
+
+//minimap.c
+void	render_minimap(t_game *game);
 
 #endif

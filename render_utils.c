@@ -6,7 +6,7 @@
 /*   By: lalves-d <lalves-d@student.42rio>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/17 16:34:17 by lalves-d          #+#    #+#             */
-/*   Updated: 2025/10/20 12:07:15 by lalves-d         ###   ########.fr       */
+/*   Updated: 2025/11/02 14:05:14 by lalves-d         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,6 +26,7 @@ int render_frame(void *param)
 
     game = (t_game *)param;
     raycasting_loop(game);
+    render_minimap(game);
     gun_update(&game->gun);
     gun_draw(game);
     mlx_put_image_to_window(game->mlx, game->win, game->img.img, 0, 0);
