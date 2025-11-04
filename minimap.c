@@ -6,7 +6,7 @@
 /*   By: lalves-d <lalves-d@student.42rio>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/02 13:51:58 by lalves-d          #+#    #+#             */
-/*   Updated: 2025/11/02 13:58:56 by lalves-d         ###   ########.fr       */
+/*   Updated: 2025/11/04 12:15:58 by lalves-d         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -88,8 +88,11 @@ static void	draw_map_tiles(t_game *game)
 			if (tile == '1')
 				draw_rect(game, x * TILE_SIZE, y * TILE_SIZE, \
 					TILE_SIZE, TILE_SIZE, C_WALL);
+			else if (tile == 'D')
+				draw_rect(game, x * TILE_SIZE, y * TILE_SIZE, \
+					TILE_SIZE, TILE_SIZE, C_DOOR);
 			else if (tile == '0' || tile == 'N' || tile == 'S' || \
-					tile == 'E' || tile == 'W')
+					tile == 'E' || tile == 'W' || tile == 'd')
 				draw_rect(game, x * TILE_SIZE, y * TILE_SIZE, \
 					TILE_SIZE, TILE_SIZE, C_FLOOR);
 			x++;
