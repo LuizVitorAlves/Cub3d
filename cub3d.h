@@ -6,7 +6,7 @@
 /*   By: lalves-d <lalves-d@student.42rio>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/16 19:13:15 by lalves-d          #+#    #+#             */
-/*   Updated: 2025/11/04 12:13:39 by lalves-d         ###   ########.fr       */
+/*   Updated: 2025/11/04 12:21:33 by lalves-d         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,6 +37,8 @@
 #define TILE_SIZE 20
 #define PLAYER_SIZE 4
 #define DIR_LINE_LEN 15
+#define MAP_OFFSET_X 15
+#define MAP_OFFSET_Y 15
 #define C_DOOR  0xA0522D
 #define C_PLAYER 0xFF0000
 #define C_WALL   0x444444
