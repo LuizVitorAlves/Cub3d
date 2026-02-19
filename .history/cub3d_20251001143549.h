@@ -120,7 +120,7 @@ void    my_mlx_pixel_put(t_img *data, int x, int y, int color);
 int render_frame(void *param);
 // void    draw_wall_slice(t_game *game, int x, double perp_wall_dist, int side);
 // void draw_wall_slice(t_game *game, int x, double perp_wall_dist);
-void draw_wall_slice(t_game *game, int x, double perp_wall_dist, int side, double ray_dir_x, double ray_dir_y);
+void draw_wall_slice(t_game *game, int x, double perp_wall_dist, int side, double ray_dir_x, double ray_dir_y)
 
 int     close_window(t_game *game);
 

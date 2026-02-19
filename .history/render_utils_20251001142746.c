@@ -141,7 +141,8 @@ int render_frame(void *param)
 //     while (y < SCREEN_HEIGHT)
 //         my_mlx_pixel_put(&game->img, x, y++, game->cfg.floor_color);
 // }
-void draw_wall_slice(t_game *game, int x, double perp_wall_dist, int side, double ray_dir_x, double ray_dir_y)
+
+void draw_wall_slice(t_game *game, int x, double perp_wall_dist, int side)
 {
     int wall_height;
     int draw_start;
@@ -154,7 +155,7 @@ void draw_wall_slice(t_game *game, int x, double perp_wall_dist, int side, doubl
     int tex_bpp;
     int tex_line_len;
 
-    // evita warnings de parâmetro não usado
+    // evita warnings
     (void)side;
 
     // Endereço da textura
@@ -178,13 +179,13 @@ void draw_wall_slice(t_game *game, int x, double perp_wall_dist, int side, doubl
     // Determina coordenada horizontal da textura
     double wall_x;
     if (side == 0)
-        wall_x = game->player.pos_y + perp_wall_dist * ray_dir_y;
+        wall_x = game->player.pos_y + perp_wall_dist * game->ray_dir_y;
     else
-        wall_x = game->player.pos_x + perp_wall_dist * ray_dir_x;
+        wall_x = game->player.pos_x + perp_wall_dist * game->ray_dir_x;
     wall_x -= floor(wall_x);
 
     tex_x = (int)(wall_x * (double)game->textura.tex_width);
-    if ((side == 0 && ray_dir_x > 0) || (side == 1 && ray_dir_y < 0))
+    if ((side == 0 && game->ray_dir_x > 0) || (side == 1 && game->ray_dir_y < 0))
         tex_x = game->textura.tex_width - tex_x - 1;
 
     // Passo vertical da textura

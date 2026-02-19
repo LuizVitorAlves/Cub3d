@@ -108,64 +108,6 @@ double calculate_dda(t_game *game, double ray_dir_x, double ray_dir_y, int *side
         return (side_dist_y - delta_dist_y);
 }
 
-// void raycasting_loop(t_game *game)
-// {
-//     int x;
-//     double perp_wall_dist;
-//     int side;
-//     int wall_height;
-//     int draw_start;
-//     int draw_end;
-//     int color;
-
-//     for (x = 0; x < SCREEN_WIDTH; x++)
-//     {
-//         double camera_x = 2 * x / (double)SCREEN_WIDTH - 1;
-//         double ray_dir_x = game->player.dir_x + game->player.plane_x * camera_x;
-//         double ray_dir_y = game->player.dir_y + game->player.plane_y * camera_x;
-
-//         perp_wall_dist = calculate_dda(game, ray_dir_x, ray_dir_y, &side);
-
-//         wall_height = (int)(SCREEN_HEIGHT / perp_wall_dist);
-//         draw_start = (-wall_height / 2) + (SCREEN_HEIGHT / 2);
-//         if (draw_start < 0) draw_start = 0;
-//         draw_end = (wall_height / 2) + (SCREEN_HEIGHT / 2);
-//         if (draw_end >= SCREEN_HEIGHT) draw_end = SCREEN_HEIGHT - 1;
-
-//         for (int y = 0; y < draw_start; y++)
-//             my_mlx_pixel_put(&game->img, x, y, game->cfg.ceiling_color);
-
-//         if (side == 0 && ray_dir_x > 0)
-//             color = 0xFF0000;
-//         else if (side == 0 && ray_dir_x < 0)
-//             color = 0x00FF00;
-//         else if (side == 1 && ray_dir_y > 0)
-//             color = 0x0000FF;
-//         else
-//             color = 0xFFFF00;
-
-//         for (int y = draw_start; y < draw_end; y++)
-//             my_mlx_pixel_put(&game->img, x, y, color);
-
-//         for (int y = draw_end; y < SCREEN_HEIGHT; y++)
-//             my_mlx_pixel_put(&game->img, x, y, game->cfg.floor_color);
-//     }
-// }
-
-
-
-
-
-
-// static int get_texture_pixel(t_img *tex, int x, int y)
-// {
-//     char *pixel;
-//     int color;
-
-//     pixel = tex->addr + (y * tex->line_len + x * (tex->bpp / 8));
-//     color = *(unsigned int *)pixel;
-//     return (color);
-// }
 void raycasting_loop(t_game *game)
 {
     int x;
@@ -174,6 +116,7 @@ void raycasting_loop(t_game *game)
     int wall_height;
     int draw_start;
     int draw_end;
+    int color;
 
     for (x = 0; x < SCREEN_WIDTH; x++)
     {
@@ -189,40 +132,21 @@ void raycasting_loop(t_game *game)
         draw_end = (wall_height / 2) + (SCREEN_HEIGHT / 2);
         if (draw_end >= SCREEN_HEIGHT) draw_end = SCREEN_HEIGHT - 1;
 
-        // pinta teto
         for (int y = 0; y < draw_start; y++)
             my_mlx_pixel_put(&game->img, x, y, game->cfg.ceiling_color);
 
-        // ----------------
-        // TEXTURA DA PAREDE (única textura)
-        // ----------------
-        double wall_x;
-        if (side == 0)
-            wall_x = game->player.pos_y + perp_wall_dist * ray_dir_y;
+        if (side == 0 && ray_dir_x > 0)
+            color = 0xFF0000;
+        else if (side == 0 && ray_dir_x < 0)
+            color = 0x00FF00;
+        else if (side == 1 && ray_dir_y > 0)
+            color = 0x0000FF;
         else
-            wall_x = game->player.pos_x + perp_wall_dist * ray_dir_x;
-        wall_x -= floor(wall_x);
-
-        int tex_x = (int)(wall_x * (double)game->textura.tex_width);
-        if ((side == 0 && ray_dir_x > 0) || (side == 1 && ray_dir_y < 0))
-            tex_x = game->textura.tex_width - tex_x - 1;
-
-        double step = 1.0 * game->textura.tex_height / wall_height;
-        double tex_pos = (draw_start - SCREEN_HEIGHT / 2 + wall_height / 2) * step;
+            color = 0xFFFF00;
 
         for (int y = draw_start; y < draw_end; y++)
-        {
-            int tex_y = (int)tex_pos & (game->textura.tex_height - 1);
-            tex_pos += step;
-
-            char *pixel = game->textura.addr
-                + (tex_y * game->textura.line_len + tex_x * (game->textura.bpp / 8));
-
-            int color = *(unsigned int *)pixel;
             my_mlx_pixel_put(&game->img, x, y, color);
-        }
 
-        // pinta chão
         for (int y = draw_end; y < SCREEN_HEIGHT; y++)
             my_mlx_pixel_put(&game->img, x, y, game->cfg.floor_color);
     }

@@ -70,33 +70,6 @@ typedef struct s_img
 } t_img;
 
 // Estrutura principal que contém todas as outras
-// typedef struct s_game
-// {
-//     void        *mlx;
-//     void        *win;
-//     t_img       img;
-//     t_config    cfg;
-//     t_player    player;
-//     void *my_asset;
-//     /*int key_w_pressed;
-//     int key_a_pressed;
-//     int key_s_pressed;
-//     int key_d_pressed;
-//     int key_left_pressed;
-//     int key_right_pressed;*/
-// }   t_game;
-
-typedef struct s_texture
-{
-    void *my_asset;     // ponteiro para a imagem da MLX (mlx_xpm_file_to_image)
-    char *addr;      // ponteiro para os pixels (mlx_get_data_addr)
-    int   tex_width;
-    int   tex_height;
-    int   bpp;
-    int   line_len;
-    int   endian;
-} t_texture;
-
 typedef struct s_game
 {
     void        *mlx;
@@ -104,11 +77,14 @@ typedef struct s_game
     t_img       img;
     t_config    cfg;
     t_player    player;
-    t_texture textura;
-    int         tex_width;
-    int         tex_height;
-} t_game;
-
+    void *my_asset;
+    /*int key_w_pressed;
+    int key_a_pressed;
+    int key_s_pressed;
+    int key_d_pressed;
+    int key_left_pressed;
+    int key_right_pressed;*/
+}   t_game;
 
 // raycasting.c
 void    raycasting_loop(t_game *game);
@@ -118,10 +94,7 @@ void    init_player(t_game *game);
 // render_utils.c
 void    my_mlx_pixel_put(t_img *data, int x, int y, int color);
 int render_frame(void *param);
-// void    draw_wall_slice(t_game *game, int x, double perp_wall_dist, int side);
-// void draw_wall_slice(t_game *game, int x, double perp_wall_dist);
-void draw_wall_slice(t_game *game, int x, double perp_wall_dist, int side, double ray_dir_x, double ray_dir_y);
-
+void    draw_wall_slice(t_game *game, int x, double perp_wall_dist, int side);
 int     close_window(t_game *game);
 
 // parse_cub.c

@@ -141,7 +141,12 @@ int render_frame(void *param)
 //     while (y < SCREEN_HEIGHT)
 //         my_mlx_pixel_put(&game->img, x, y++, game->cfg.floor_color);
 // }
-void draw_wall_slice(t_game *game, int x, double perp_wall_dist, int side, double ray_dir_x, double ray_dir_y)
+
+
+
+
+
+void draw_wall_slice(t_game *game, int x, double perp_wall_dist)
 {
     int wall_height;
     int draw_start;
@@ -153,14 +158,41 @@ void draw_wall_slice(t_game *game, int x, double perp_wall_dist, int side, doubl
     char *tex_addr;
     int tex_bpp;
     int tex_line_len;
+    int tex_endian;
 
-    // evita warnings de parâmetro não usado
-    (void)side;
+    // pega endereço da textura
+    tex_addr = mlx_get_data_addr(game->textura.my_asset, &tex_bpp, &tex_line_len, &tex_endian);
 
-    // Endereço da textura
+    // altura da parede na tela
+    wall_height = (int)(SCREEN_HEIGHT / perp_wall_dist);
+    draw_start = -wall_height / 2 + SCREEN_HEIGHT / 2;
+    if (draw_start < 0)
+        draw_start = 0;
+    draw_end = wall_height / 2 + SCREEN_HEIGHT / 2;
+    if (draw_end >= SCREEN_HEIGHT)
+        draw_end = SCREEN_HEIGHT - 1;
+
+    // desenha teto
+    for (int y = 0; y < draw_start; y++)
+    void draw_wall_slice(t_game *game, int x, double perp_wall_dist, int side)
+{
+    int wall_height;
+    int draw_start;
+    int draw_end;
+    double step;
+    double tex_pos;
+    int tex_x;
+    int tex_y;
+    char *tex_addr;
+    int tex_bpp;
+    int tex_line_len;
+    int tex_endian;
+
+    // Pega endereço da textura
     tex_addr = game->textura.addr;
     tex_bpp = game->textura.bpp;
     tex_line_len = game->textura.line_len;
+    tex_endian = game->textura.endian;
 
     // Altura da parede na tela
     wall_height = (int)(SCREEN_HEIGHT / perp_wall_dist);
@@ -177,14 +209,14 @@ void draw_wall_slice(t_game *game, int x, double perp_wall_dist, int side, doubl
 
     // Determina coordenada horizontal da textura
     double wall_x;
-    if (side == 0)
-        wall_x = game->player.pos_y + perp_wall_dist * ray_dir_y;
-    else
-        wall_x = game->player.pos_x + perp_wall_dist * ray_dir_x;
+    if (side == 0) // parede vertical
+        wall_x = game->player.pos_y + perp_wall_dist * game->ray_dir_y;
+    else           // parede horizontal
+        wall_x = game->player.pos_x + perp_wall_dist * game->ray_dir_x;
     wall_x -= floor(wall_x);
 
     tex_x = (int)(wall_x * (double)game->textura.tex_width);
-    if ((side == 0 && ray_dir_x > 0) || (side == 1 && ray_dir_y < 0))
+    if ((side == 0 && game->ray_dir_x > 0) || (side == 1 && game->ray_dir_y < 0))
         tex_x = game->textura.tex_width - tex_x - 1;
 
     // Passo vertical da textura
@@ -207,3 +239,11 @@ void draw_wall_slice(t_game *game, int x, double perp_wall_dist, int side, doubl
     for (int y = draw_end; y < SCREEN_HEIGHT; y++)
         my_mlx_pixel_put(&game->img, x, y, game->cfg.floor_color);
 }
+
+
+
+
+
+
+
+

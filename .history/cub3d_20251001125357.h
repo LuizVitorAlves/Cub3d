@@ -92,9 +92,9 @@ typedef struct s_texture
     char *addr;      // ponteiro para os pixels (mlx_get_data_addr)
     int   tex_width;
     int   tex_height;
-    int   bpp;
-    int   line_len;
-    int   endian;
+    int   *bpp;
+    int   *line_len;
+    int   *endian;
 } t_texture;
 
 typedef struct s_game
@@ -119,8 +119,7 @@ void    init_player(t_game *game);
 void    my_mlx_pixel_put(t_img *data, int x, int y, int color);
 int render_frame(void *param);
 // void    draw_wall_slice(t_game *game, int x, double perp_wall_dist, int side);
-// void draw_wall_slice(t_game *game, int x, double perp_wall_dist);
-void draw_wall_slice(t_game *game, int x, double perp_wall_dist, int side, double ray_dir_x, double ray_dir_y);
+void draw_wall_slice(t_game *game, int x, double perp_wall_dist);
 
 int     close_window(t_game *game);
 

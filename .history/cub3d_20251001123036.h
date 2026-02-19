@@ -86,16 +86,13 @@ typedef struct s_img
 //     int key_right_pressed;*/
 // }   t_game;
 
-typedef struct s_texture
+typedef struct s_teste_textura
 {
-    void *my_asset;     // ponteiro para a imagem da MLX (mlx_xpm_file_to_image)
-    char *addr;      // ponteiro para os pixels (mlx_get_data_addr)
-    int   tex_width;
-    int   tex_height;
-    int   bpp;
-    int   line_len;
-    int   endian;
-} t_texture;
+    t_img my_asset;
+    int         tex_width;     // largura da textura
+    int         tex_height; 
+    void *my_asset_adr;
+}t_teste_textura;
 
 typedef struct s_game
 {
@@ -104,7 +101,7 @@ typedef struct s_game
     t_img       img;
     t_config    cfg;
     t_player    player;
-    t_texture textura;
+    t_teste_textura textura;
     int         tex_width;
     int         tex_height;
 } t_game;
@@ -119,8 +116,7 @@ void    init_player(t_game *game);
 void    my_mlx_pixel_put(t_img *data, int x, int y, int color);
 int render_frame(void *param);
 // void    draw_wall_slice(t_game *game, int x, double perp_wall_dist, int side);
-// void draw_wall_slice(t_game *game, int x, double perp_wall_dist);
-void draw_wall_slice(t_game *game, int x, double perp_wall_dist, int side, double ray_dir_x, double ray_dir_y);
+void draw_wall_slice(t_game *game, int x, double perp_wall_dist);
 
 int     close_window(t_game *game);
 

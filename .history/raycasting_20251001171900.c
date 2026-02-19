@@ -157,15 +157,15 @@ double calculate_dda(t_game *game, double ray_dir_x, double ray_dir_y, int *side
 
 
 
-// static int get_texture_pixel(t_img *tex, int x, int y)
-// {
-//     char *pixel;
-//     int color;
+static void get_texture_pixel(t_img *tex, int x, int y)
+{
+    char *pixel;
+    int color;
 
-//     pixel = tex->addr + (y * tex->line_len + x * (tex->bpp / 8));
-//     color = *(unsigned int *)pixel;
-//     return (color);
-// }
+    pixel = tex->addr + (y * tex->line_len + x * (tex->bpp / 8));
+    color = *(unsigned int *)pixel;
+    return (color);
+}
 void raycasting_loop(t_game *game)
 {
     int x;
@@ -203,16 +203,16 @@ void raycasting_loop(t_game *game)
             wall_x = game->player.pos_x + perp_wall_dist * ray_dir_x;
         wall_x -= floor(wall_x);
 
-        int tex_x = (int)(wall_x * (double)game->textura.tex_width);
+        int tex_x = (int)(wall_x * (double)game->textura.width);
         if ((side == 0 && ray_dir_x > 0) || (side == 1 && ray_dir_y < 0))
-            tex_x = game->textura.tex_width - tex_x - 1;
+            tex_x = game->textura.width - tex_x - 1;
 
-        double step = 1.0 * game->textura.tex_height / wall_height;
+        double step = 1.0 * game->textura.height / wall_height;
         double tex_pos = (draw_start - SCREEN_HEIGHT / 2 + wall_height / 2) * step;
 
         for (int y = draw_start; y < draw_end; y++)
         {
-            int tex_y = (int)tex_pos & (game->textura.tex_height - 1);
+            int tex_y = (int)tex_pos & (game->textura.height - 1);
             tex_pos += step;
 
             char *pixel = game->textura.addr

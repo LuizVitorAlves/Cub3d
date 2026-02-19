@@ -141,29 +141,23 @@ int render_frame(void *param)
 //     while (y < SCREEN_HEIGHT)
 //         my_mlx_pixel_put(&game->img, x, y++, game->cfg.floor_color);
 // }
-void draw_wall_slice(t_game *game, int x, double perp_wall_dist, int side, double ray_dir_x, double ray_dir_y)
+
+
+
+
+void draw_wall_slice(t_game *game, int x, double perp_wall_dist, int side)
 {
     int wall_height;
     int draw_start;
     int draw_end;
-    double step;
-    double tex_pos;
-    int tex_x;
-    int tex_y;
-    char *tex_addr;
-    int tex_bpp;
-    int tex_line_len;
 
     // evita warnings de parâmetro não usado
+    (void)x;
+    (void)perp_wall_dist;
     (void)side;
 
-    // Endereço da textura
-    tex_addr = game->textura.addr;
-    tex_bpp = game->textura.bpp;
-    tex_line_len = game->textura.line_len;
-
-    // Altura da parede na tela
-    wall_height = (int)(SCREEN_HEIGHT / perp_wall_dist);
+    // altura da parede na tela
+    wall_height = (int)(SCREEN_HEIGHT / 1.0); // placeholder, substitua pelo cálculo real
     draw_start = -wall_height / 2 + SCREEN_HEIGHT / 2;
     if (draw_start < 0)
         draw_start = 0;
@@ -171,39 +165,11 @@ void draw_wall_slice(t_game *game, int x, double perp_wall_dist, int side, doubl
     if (draw_end >= SCREEN_HEIGHT)
         draw_end = SCREEN_HEIGHT - 1;
 
-    // Desenha teto
+    // desenha teto
     for (int y = 0; y < draw_start; y++)
         my_mlx_pixel_put(&game->img, x, y, game->cfg.ceiling_color);
 
-    // Determina coordenada horizontal da textura
-    double wall_x;
-    if (side == 0)
-        wall_x = game->player.pos_y + perp_wall_dist * ray_dir_y;
-    else
-        wall_x = game->player.pos_x + perp_wall_dist * ray_dir_x;
-    wall_x -= floor(wall_x);
-
-    tex_x = (int)(wall_x * (double)game->textura.tex_width);
-    if ((side == 0 && ray_dir_x > 0) || (side == 1 && ray_dir_y < 0))
-        tex_x = game->textura.tex_width - tex_x - 1;
-
-    // Passo vertical da textura
-    step = 1.0 * game->textura.tex_height / wall_height;
-    tex_pos = (draw_start - SCREEN_HEIGHT / 2 + wall_height / 2) * step;
-
-    // Desenha parede com textura
-    for (int y = draw_start; y < draw_end; y++)
-    {
-        tex_y = (int)tex_pos;
-        if (tex_y >= game->textura.tex_height)
-            tex_y = game->textura.tex_height - 1;
-        tex_pos += step;
-
-        int color = *(unsigned int *)(tex_addr + (tex_y * tex_line_len + tex_x * (tex_bpp / 8)));
-        my_mlx_pixel_put(&game->img, x, y, color);
-    }
-
-    // Desenha chão
+    // desenha chão
     for (int y = draw_end; y < SCREEN_HEIGHT; y++)
         my_mlx_pixel_put(&game->img, x, y, game->cfg.floor_color);
 }

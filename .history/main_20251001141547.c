@@ -67,12 +67,7 @@ game.textura.addr = mlx_get_data_addr(game.textura.my_asset,
 
     // Inicializa o jogador
     init_player(&game);
-    for (int y = 0; y < game.textura.tex_height; y++)
-    for (int x = 0; x < game.textura.tex_width; x++)
-    {
-        int color = *(unsigned int *)(game.textura.addr + (y * game.textura.line_len + x * (game.textura.bpp / 8)));
-        my_mlx_pixel_put(&game.img, x, y, color);
-    }
+
     // Configura os hooks
     mlx_loop_hook(game.mlx, (int (*)())render_frame, &game);
     mlx_hook(game.win, 2, 1L << 0, handle_key_press, &game); // Teclas

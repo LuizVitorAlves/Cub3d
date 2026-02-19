@@ -157,15 +157,15 @@ double calculate_dda(t_game *game, double ray_dir_x, double ray_dir_y, int *side
 
 
 
-// static int get_texture_pixel(t_img *tex, int x, int y)
-// {
-//     char *pixel;
-//     int color;
+static void get_texture_pixel(t_img *tex, int x, int y)
+{
+    char *pixel;
+    int color;
 
-//     pixel = tex->addr + (y * tex->line_len + x * (tex->bpp / 8));
-//     color = *(unsigned int *)pixel;
-//     return (color);
-// }
+    pixel = tex->addr + (y * tex->line_len + x * (tex->bpp / 8));
+    color = *(unsigned int *)pixel;
+    return (color);
+}
 void raycasting_loop(t_game *game)
 {
     int x;
