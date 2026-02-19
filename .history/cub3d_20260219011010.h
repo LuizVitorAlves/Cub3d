@@ -45,13 +45,6 @@
 #define C_FLOOR  0xFFFFFF
 #define C_DIR    0xFF0000
 
-
-//definição das constantes das texturas
-#define TEX_NO 0
-#define TEX_SO 1
-#define TEX_WE 2
-#define TEX_EA 3
-
 // Estrutura da arma
 typedef struct s_gun
 {

@@ -25,8 +25,7 @@ SRCS = \
 	keys.c \
 	door.c \
 	sprite.c \
-	minimap.c\
-	textures.c
+	minimap.c
 
 # Arquivos fontes da parte de bônus
 SRCS_BONUS = 

@@ -45,13 +45,6 @@
 #define C_FLOOR  0xFFFFFF
 #define C_DIR    0xFF0000
 
-
-//definição das constantes das texturas
-#define TEX_NO 0
-#define TEX_SO 1
-#define TEX_WE 2
-#define TEX_EA 3
-
 // Estrutura da arma
 typedef struct s_gun
 {
@@ -89,20 +82,6 @@ typedef struct s_config
     int     is_in_map_section;
 }   t_config;
 
-//Estrutura que guarda as texturas
-typedef struct s_tex
-{
-    void    *img;
-    char    *addr;
-    int     bpp;
-    int     line_len;
-    int     endian;
-    int     width;
-    int     height;
-}   t_tex;
-
-
-
 // Estrutura para a imagem
 typedef struct s_img
 {
@@ -111,7 +90,6 @@ typedef struct s_img
     int     bpp;
     int     line_len;
     int     endian;
-   
 } t_img;
 
 // Estrutura principal que contém todas as outras
@@ -123,7 +101,6 @@ typedef struct s_game
     t_config    cfg;
     t_player    player;
     t_gun       gun;
-    t_tex  tex[4];
 }   t_game;
 
 // Estrutura da porta
@@ -158,9 +135,6 @@ void    free_config_and_map(t_config *cfg);
 int     ft_atoi(const char *str);
 void    free_game_memory(t_game *game);
 
-
-//textures.c
-int load_textures(t_game *game);
 // parse_color.c
 int     parse_color(const char *line);
 char    *skip_spaces(char *str);

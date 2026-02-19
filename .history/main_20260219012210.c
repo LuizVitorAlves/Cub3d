@@ -32,7 +32,10 @@ int main(int argc, char **argv)
     }
     if (load_textures(&game))
     return (1);
- 
+    printf("NO: %p\n", game.tex[TEX_NO].img);
+printf("SO: %p\n", game.tex[TEX_SO].img);
+printf("WE: %p\n", game.tex[TEX_WE].img);
+printf("EA: %p\n", game.tex[TEX_EA].img);
 
 
     gun_load(&game);

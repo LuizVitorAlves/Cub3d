@@ -32,8 +32,6 @@ int main(int argc, char **argv)
     }
     if (load_textures(&game))
     return (1);
- 
-
 
     gun_load(&game);
     game.win = mlx_new_window(game.mlx, SCREEN_WIDTH, SCREEN_HEIGHT, "cub3D");

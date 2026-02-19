@@ -350,7 +350,7 @@ int	parse_cub_file(char *filename, t_config *cfg)
 	fd = open(filename, O_RDONLY);
 	if (fd < 0)
 	{
-		printf(ERROR_MSG "not possible open this map.\n");
+		printf(ERROR_MSG "Não foi possível abrir o arquivo do mapa.\n");
 		return (1);
 	}
 	if (read_file_lines(fd, cfg, temp_map, counts))

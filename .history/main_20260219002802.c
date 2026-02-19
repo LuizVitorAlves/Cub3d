@@ -30,11 +30,6 @@ int main(int argc, char **argv)
         free_config_and_map(&game.cfg);
         return (1);
     }
-    if (load_textures(&game))
-    return (1);
- 
-
-
     gun_load(&game);
     game.win = mlx_new_window(game.mlx, SCREEN_WIDTH, SCREEN_HEIGHT, "cub3D");
     if (!game.win) 
