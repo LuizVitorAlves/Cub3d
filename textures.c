@@ -46,7 +46,7 @@ int get_tex_pixel(t_tex *tex, int x, int y)
 
     bytes_per_pixel = tex->bpp / 8;
 
-    // segurança básica (evita ler fora se algo der errado)
+    // parte segura
     if (x < 0) x = 0;
     if (y < 0) y = 0;
     if (x >= tex->width)  x = tex->width - 1;

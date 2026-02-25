@@ -12,9 +12,9 @@
 
 #include "cub3d.h"
 
-int	starts_with(const char *str, const char *prefix)
+int starts_with(const char *str, const char *prefix)
 {
-	int	i;
+	int i;
 
 	i = 0;
 	while (prefix[i])
@@ -26,11 +26,11 @@ int	starts_with(const char *str, const char *prefix)
 	return (1);
 }
 
-char	*ft_strdup(const char *s)
+char *ft_strdup(const char *s)
 {
-	char	*new;
-	size_t	len;
-	size_t	i;
+	char *new;
+	size_t len;
+	size_t i;
 
 	len = strlen(s);
 	i = 0;
@@ -46,10 +46,10 @@ char	*ft_strdup(const char *s)
 	return (new);
 }
 
-char	**copy_map(char **temp_map, int size)
+char **copy_map(char **temp_map, int size)
 {
-	char	**map;
-	int		i;
+	char **map;
+	int i;
 
 	map = malloc(sizeof(char *) * (size + 1));
 	if (!map)
@@ -71,7 +71,7 @@ char	**copy_map(char **temp_map, int size)
 	return (map);
 }
 
-static void	safe_free(void **ptr)
+static void safe_free(void **ptr)
 {
 	if (ptr && *ptr)
 	{
@@ -80,12 +80,12 @@ static void	safe_free(void **ptr)
 	}
 }
 
-void	free_config_and_map(t_config *cfg)
+void free_config_and_map(t_config *cfg)
 {
-	int	i;
+	int i;
 
 	if (!cfg)
-		return ;
+		return;
 	safe_free((void **)&cfg->no_path);
 	safe_free((void **)&cfg->so_path);
 	safe_free((void **)&cfg->we_path);
@@ -105,18 +105,18 @@ void	free_config_and_map(t_config *cfg)
 
 void free_game_memory(t_game *game)
 {
-    free_config_and_map(&game->cfg);
-    if (game->img.img)
-        mlx_destroy_image(game->mlx, game->img.img);
-    if (game->win)
-        mlx_destroy_window(game->mlx, game->win);
+	free_config_and_map(&game->cfg);
+	if (game->img.img)
+		mlx_destroy_image(game->mlx, game->img.img);
+	if (game->win)
+		mlx_destroy_window(game->mlx, game->win);
 }
 
-int	ft_atoi(const char *str)
+int ft_atoi(const char *str)
 {
-	int		sign;
-	long	result;
-	int		i;
+	int sign;
+	long result;
+	int i;
 
 	i = 0;
 	result = 0;
