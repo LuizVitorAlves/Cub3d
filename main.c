@@ -17,10 +17,7 @@ int main(int argc, char **argv)
     t_game  game;
 
     if (argc != 2)
-    {
-        printf("Uso: ./cub3d mapa.cub\n");
-        return (1);
-    }
+         error_argc();
     memset(&game, 0, sizeof(t_game));
     if (parse_cub_file(argv[1], &game.cfg))
         return (1);
@@ -31,10 +28,8 @@ int main(int argc, char **argv)
         return (1);
     }
     if (load_textures(&game))
-    return (1);
- 
-    printf("pixel NO(0,0) = %x\n", get_tex_pixel(&game.tex[TEX_NO], 0, 0));
-
+        return (1);
+    ft_printf("pixel NO(0,0) = %x\n", get_tex_pixel(&game.tex[TEX_NO], 0, 0));
     gun_load(&game);
     game.win = mlx_new_window(game.mlx, SCREEN_WIDTH, SCREEN_HEIGHT, "cub3D");
     if (!game.win) 
@@ -42,6 +37,12 @@ int main(int argc, char **argv)
         cleanup_on_gun_error(&game, "Falha ao criar a janela.");
         return (1);
     }
+    init_var_main(&game);
+    return (0);
+}
+
+static void init_var_main(*game)
+{
     mlx_mouse_hide(game.mlx, game.win);
     mlx_mouse_move(game.mlx, game.win, SCREEN_WIDTH / 2, SCREEN_HEIGHT / 2);
     game.img.img = mlx_new_image(game.mlx, SCREEN_WIDTH, SCREEN_HEIGHT);
@@ -53,5 +54,9 @@ int main(int argc, char **argv)
     mlx_hook(game.win, 17, 0, close_window, &game);
     mlx_loop(game.mlx);
     free_game_memory(&game);
-    return (0);
+}
+static int error_argc()
+{
+     ft_printf("Uso: ./cub3d mapa.cub\n");
+        return (1);
 }

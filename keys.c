@@ -16,7 +16,8 @@ void move_forward_backward(int keycode, t_game *game)
 {
     double next_x = game->player.pos_x;
     double next_y = game->player.pos_y;
-
+    int map_x = (int)next_x;
+    int map_y = (int)next_y;
     if (keycode == 119) // Tecla W
     {
         next_x += game->player.dir_x * MOVE_SPEED;
@@ -27,8 +28,6 @@ void move_forward_backward(int keycode, t_game *game)
         next_x -= game->player.dir_x * MOVE_SPEED;
         next_y -= game->player.dir_y * MOVE_SPEED;
     }
-    int map_x = (int)next_x;
-    int map_y = (int)next_y;
     if (game->cfg.map[map_y][map_x] != '1' && game->cfg.map[map_y][map_x] != 'D')
     {
         game->player.pos_x = next_x;

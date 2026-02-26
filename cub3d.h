@@ -12,6 +12,7 @@
 
 #ifndef CUB3D_H
 # define CUB3D_H
+# include "libftprintf.h"
 
 # include <stdlib.h>
 # include <stdio.h>

@@ -1,13 +1,16 @@
-# Nome do executável
 NAME = cub3d
 
 # Compilador e flags
 CC = cc
-CFLAGS = -Wall -Wextra -Werror -Iinc
+CFLAGS = -Wall -Wextra -Werror -Iinc -Ift_printf
 
 # Diretório da MLX
 MLX_DIR = ./minilibx-linux
 MLX = $(MLX_DIR)/libmlx.a
+
+# Diretório do ft_printf
+PRINTF_DIR = ./ft_printf
+PRINTF = $(PRINTF_DIR)/libftprintf.a
 
 # Flags para linkar a MLX
 MLX_FLAGS = -L$(MLX_DIR) -lmlx -lXext -lX11 -lm -lz
@@ -25,47 +28,42 @@ SRCS = \
 	keys.c \
 	door.c \
 	sprite.c \
-	minimap.c\
+	minimap.c \
 	textures.c
 
-# Arquivos fontes da parte de bônus
-SRCS_BONUS = 
-
-# Arquivos objeto correspondentes
+# Arquivos objeto
 OBJS = $(SRCS:.c=.o)
-OBJS_BONUS = $(SRCS_BONUS:.c=.o)
 
-# -------------------------------------
-# Regra principal
+# -----------------------------
+
 all: $(NAME)
 
-# Compila a MLX se ainda não existir
+# Compila MLX
 $(MLX):
 	$(MAKE) -C $(MLX_DIR)
 
-# Executável depende dos objetos e da MLX
-$(NAME): $(OBJS) $(MLX)
-	$(CC) $(CFLAGS) $(OBJS) $(MLX) $(MLX_FLAGS) -o $(NAME)
+# Compila ft_printf
+$(PRINTF):
+	$(MAKE) -C $(PRINTF_DIR)
 
-# Regra para o bônus
-bonus: $(OBJS) $(OBJS_BONUS) $(MLX)
-	$(CC) $(CFLAGS) $(OBJS) $(OBJS_BONUS) $(MLX) $(MLX_FLAGS) -o $(NAME)_bonus
+# Executável depende de objetos + MLX + ft_printf
+$(NAME): $(OBJS) $(MLX) $(PRINTF)
+	$(CC) $(CFLAGS) $(OBJS) $(PRINTF) $(MLX) $(MLX_FLAGS) -o $(NAME)
 
-# Compila os objetos
+# Regra para compilar objetos
 %.o: %.c
 	$(CC) $(CFLAGS) -c $< -o $@
 
-# Limpa os arquivos .o
+# Limpeza
 clean:
-	rm -f $(OBJS) $(OBJS_BONUS)
+	rm -f $(OBJS)
 	$(MAKE) -C $(MLX_DIR) clean
+	$(MAKE) -C $(PRINTF_DIR) clean
 
-# Limpa tudo, inclusive o executável
 fclean: clean
-	rm -f $(NAME) $(NAME)_bonus
-	$(MAKE) -C $(MLX_DIR) clean
+	rm -f $(NAME)
+	$(MAKE) -C $(PRINTF_DIR) fclean
 
-# Recompila do zero
 re: fclean all
 
-.PHONY: all clean fclean re bonus
+.PHONY: all clean fclean re
