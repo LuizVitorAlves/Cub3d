@@ -4,7 +4,7 @@ SRC=ft_putnbr.c \
 	ft_putnumber_base_cap.c\
 	ft_strlen.c \
 	ft_count_args.c \
-	ft_printf.c \
+	printf.c \
 	ft_putchar.c \
 	ft_putstr.c \
 	ft_putptr.c \

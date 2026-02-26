@@ -6,13 +6,13 @@
 /*   By: lalves-d <lalves-d@student.42rio>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/16 19:13:15 by lalves-d          #+#    #+#             */
-/*   Updated: 2025/11/04 12:21:33 by lalves-d         ###   ########.fr       */
+/*   Updated: 2026/02/26 17:42:16 by lalves-d         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
+
 #ifndef CUB3D_H
 # define CUB3D_H
-# include "libftprintf.h"
 
 # include <stdlib.h>
 # include <stdio.h>

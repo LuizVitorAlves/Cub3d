@@ -8,8 +8,8 @@ CFLAGS = -Wall -Wextra -Werror -Iinc -Ift_printf
 MLX_DIR = ./minilibx-linux
 MLX = $(MLX_DIR)/libmlx.a
 
-# Diretório do ft_printf
-PRINTF_DIR = ./ft_printf
+# Diretório do printf
+PRINTF_DIR = ./printf
 PRINTF = $(PRINTF_DIR)/libftprintf.a
 
 # Flags para linkar a MLX
@@ -42,11 +42,11 @@ all: $(NAME)
 $(MLX):
 	$(MAKE) -C $(MLX_DIR)
 
-# Compila ft_printf
+# Compila printf
 $(PRINTF):
 	$(MAKE) -C $(PRINTF_DIR)
 
-# Executável depende de objetos + MLX + ft_printf
+# Executável depende de objetos + MLX + printf
 $(NAME): $(OBJS) $(MLX) $(PRINTF)
 	$(CC) $(CFLAGS) $(OBJS) $(PRINTF) $(MLX) $(MLX_FLAGS) -o $(NAME)
 

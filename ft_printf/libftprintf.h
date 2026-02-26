@@ -3,19 +3,19 @@
 /*                                                        :::      ::::::::   */
 /*   libftprintf.h                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: uviana-b <uviana-b@student.42.rio>         +#+  +:+       +#+        */
+/*   By: lalves-d <lalves-d@student.42rio>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/26 03:58:36 by uviana-b          #+#    #+#             */
-/*   Updated: 2024/10/29 07:19:17 by uviana-b         ###   ########.fr       */
+/*   Updated: 2026/02/26 17:30:17 by lalves-d         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
-#ifndef LIBFTPRINTF_H
+
 # define LIBFTPRINTF_H
 # include <unistd.h>
 # include <stdarg.h>
 
 size_t	ft_strlen(const char *str);
-int		ft_printf(const char *str, ...);
+int		printf(const char *str, ...);
 int		ft_putnbr(int n);
 int		ft_putnumber_base(unsigned int num);
 int		ft_putnumber_base_cap(unsigned int num);

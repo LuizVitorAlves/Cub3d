@@ -1,7 +1,7 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_printf.c                                        :+:      :+:    :+:   */
+/*   printf.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: uviana-b <uviana-b@student.42.rio>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
@@ -54,7 +54,7 @@ static int	ft_check_params(const char *str, int i, va_list args)
 	return (0);
 }
 
-int	ft_printf(const char *str, ...)
+int	printf(const char *str, ...)
 {
 	va_list	args;
 	int		i;
