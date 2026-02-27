@@ -6,7 +6,7 @@
 /*   By: lalves-d <lalves-d@student.42rio>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/16 19:13:15 by lalves-d          #+#    #+#             */
-/*   Updated: 2026/02/27 02:19:34 by lalves-d         ###   ########.fr       */
+/*   Updated: 2026/02/27 03:17:38 by lalves-d         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -130,10 +130,14 @@ typedef struct s_game
 // Estrutura da porta
 typedef struct s_door
 {
-    int     map_x;
-    int     map_y;
-    double  state;
-    int     is_open;
+  double	target_x;
+	double	target_y;
+	int		map_x;
+	int		map_y;
+	int		map_width;
+	char	*cell;
+	int		player_map_x;
+	int		player_map_y;
 }   t_door;
 
 //estrutura da flord fill
@@ -190,7 +194,10 @@ t_ff	init_ff(int player_x, int player_y, char **map_copy, int map_height);
 //parser_cub_utils_suport
 int	process_non_empty_line(char *line,
 	t_config *cfg, t_parser_state *state);
-  
+void	free_map_copy(char **map_copy);
+//validate_map.c
+int	validate_map(t_config *cfg);
+
 //textures.c
 int load_textures(t_game *game);
 int get_tex_pixel(t_tex *tex, int x, int y);

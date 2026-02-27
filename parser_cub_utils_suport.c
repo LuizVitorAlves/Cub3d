@@ -6,13 +6,13 @@
 /*   By: lalves-d <lalves-d@student.42rio>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/27 01:03:55 by uviana-b          #+#    #+#             */
-/*   Updated: 2026/02/27 02:33:37 by lalves-d         ###   ########.fr       */
+/*   Updated: 2026/02/27 02:54:13 by lalves-d         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "cub3d.h"
 
-static void	free_map_copy(char **map_copy)
+void	free_map_copy(char **map_copy)
 {
 	int	i;
 
@@ -20,32 +20,6 @@ static void	free_map_copy(char **map_copy)
 	while (map_copy[i])
 		free(map_copy[i++]);
 	free(map_copy);
-}
-
-int	validate_map(t_config *cfg)
-{
-	
-	char	**map_copy;
-	int		is_valid;
-	int		player_x;
-	int		player_y;
-	t_ff	ff;
-
-	is_valid = 1;
-	if (find_and_validate_player(cfg, &player_x, &player_y))
-	{
-		printf(ERROR_MSG "Invalid number of player positions (must be 1).\n");
-		return (1);
-	}
-	map_copy = copy_map_wrapper(cfg->map, cfg->map_height);
-	if (!map_copy)
-		return (1);
-	ff = init_ff(player_x, player_y, map_copy, cfg->map_height);
-	flood_fill(map_copy, ff, &is_valid);
-	free_map_copy(map_copy);
-	if (!is_valid)
-		printf(ERROR_MSG "Map is not closed.\n");
-	return (!is_valid);
 }
 
 static int	handle_map_line(char *line, char **temp_map, int *count)
@@ -97,20 +71,21 @@ static int	handle_config_line(char *line, t_config *cfg, int *count)
 }
 
 /* Helper para lidar com linhas que iniciam a seção do mapa */
-static int	process_config_transition(char *line, t_config *cfg, t_parser_state *state)
+static int	process_config_transition(char *line,
+	t_config *cfg, t_parser_state *state)
 {
 	if (state->config_count >= 6 && is_map_line(line))
 	{
 		cfg->is_in_map_section = 1;
-		return handle_map_line(line, state->temp_map, &state->map_count);
+		return (handle_map_line(line, state->temp_map, &state->map_count));
 	}
 	if (state->config_count < 6)
 	{
 		printf(ERROR_MSG "Configurações incompletas antes do mapa.\n");
-		return 1;
+		return (1);
 	}
 	printf(ERROR_MSG "Linha de configuração desconhecida.\n");
-	return 1;
+	return (1);
 }
 
 //sequancia de funçoes derivadas da process_non_empty_line
@@ -128,6 +103,3 @@ int	process_non_empty_line(char *line,
 		return (process_config_transition(line, cfg, state));
 	return (0);
 }
-
-
-

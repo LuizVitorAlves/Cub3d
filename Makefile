@@ -32,7 +32,8 @@ SRCS = \
 	textures.c\
 	parser_cub_utils.c\
 	parser_cub_utils_suport.c\
-	utils_suport_helper.c
+	utils_suport_helper.c\
+	validate_map.c
 
 # Arquivos objeto
 OBJS = $(SRCS:.c=.o)
