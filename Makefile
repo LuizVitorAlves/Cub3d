@@ -36,7 +36,10 @@ SRCS = \
 	validate_map.c\
 	keys_utils.c\
 	minimap_utils.c\
-	parser_utils2.c
+	parser_utils2.c\
+	raycasting_utils.c\
+	dda.c\
+	gun_draw.c
 
 # Arquivos objeto
 OBJS = $(SRCS:.c=.o)

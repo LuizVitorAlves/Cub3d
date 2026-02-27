@@ -6,7 +6,7 @@
 /*   By: lalves-d <lalves-d@student.42rio>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/26 23:07:12 by uviana-b          #+#    #+#             */
-/*   Updated: 2026/02/27 02:04:59 by lalves-d         ###   ########.fr       */
+/*   Updated: 2026/02/27 17:48:41 by lalves-d         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,7 +22,7 @@ int	parse_config_line(char *line, t_config *cfg)
 	return (1);
 }
 
- void	flood_fill(char **map, t_ff ff,
+void	flood_fill(char **map, t_ff ff,
 	int *is_valid)
 {
 	char	c;
