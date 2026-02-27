@@ -6,7 +6,7 @@
 /*   By: lalves-d <lalves-d@student.42rio>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/16 19:13:15 by lalves-d          #+#    #+#             */
-/*   Updated: 2026/02/27 09:18:38 by lalves-d         ###   ########.fr       */
+/*   Updated: 2026/02/27 16:42:02 by lalves-d         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,7 +45,7 @@
 #define C_WALL   0x444444
 #define C_FLOOR  0xFFFFFF
 #define C_DIR    0xFF0000
-
+# define MAX_MAP_HEIGHT 1024
 
 //definição das constantes das texturas
 #define TEX_NO 0
@@ -179,10 +179,81 @@ typedef struct s_line
 	float	y_inc;
 }	t_line;
 
+//estrutura do dda
+typedef struct s_dda
+{
+    double  ray_dir_x;
+    double  ray_dir_y; 
+    double	side_dist_x;
+	double	side_dist_y;
+	double	delta_dist_x;
+	double	delta_dist_y;
+    char    *hit_char;
+    int     side;
+    int		map_x;
+	int		map_y;
+	int		step_x;
+	int		step_y;
+	int		hit;
+}t_dda;
+
+typedef struct s_ray_loop
+{
+	double	camera_x;
+	double	perp_wall_dist;
+	int		wall_height;
+	int		draw_start;
+	int		draw_end;
+	double	wallX;
+	double	step;
+	double	texPos;
+}	t_ray_loop;
+
+//gun struct
+typedef struct s_gun_tmp
+{
+	void	*img;
+	char	*src;
+	int		x;
+	int		y;
+	int		color;
+	int		sw;
+	int		sh;
+	int		line_len;
+	int		bpp;
+}	t_gun_tmp;
+
+typedef struct s_ru
+{
+	t_game	*game;
+	int		x;
+	int		draw_start;
+	int		draw_end;
+	int		color;
+}	t_ru;
+
+//struct process file name
+typedef struct s_pfn
+{
+    char *line;
+    int *map_count;
+    int *config_count;
+}t_pfn;
+
 // raycasting.c
 void    raycasting_loop(t_game *game);
-double calculate_dda(t_game *game, double ray_dir_x, double ray_dir_y, int *side, char *hit_char);
+double calculate_dda(t_game *game, t_dda *dda);
 void    init_player(t_game *game);
+void	calc_wall_height(t_ray_loop *rl);
+t_tex	*select_texture(t_game *game,
+	t_ray_loop *rl, t_dda *dda);
+void	draw_flor(t_game *game, int y, int x);
+void	draw_column(t_game *game, t_ray_loop *rl,
+	t_tex *tex, int x);
+void	init_ray(t_game *game, t_ray_loop *rl, t_dda *dda, int x);
+void	step_math(t_dda *dda, t_game *game);
+void	hit_math(t_game *game, t_dda *dda);
+
 
 // render_utils.c
 void    my_mlx_pixel_put(t_img *data, int x, int y, int color);
@@ -249,6 +320,8 @@ void    gun_start_anim(t_gun *gun);
 void    gun_load(t_game *game);
 void    gun_draw(t_game *game);
 void    cleanup_on_gun_error(t_game *game, char *error_msg);
+void	gun_draw_sup(t_gun_tmp v, t_game *game);
+
 
 //minimap.c
 void	render_minimap(t_game *game);

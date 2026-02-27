@@ -5,101 +5,81 @@
 /*                                                    +:+ +:+         +:+     */
 /*   By: lalves-d <lalves-d@student.42rio>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2026/02/27 01:03:55 by uviana-b          #+#    #+#             */
-/*   Updated: 2026/02/27 02:54:13 by lalves-d         ###   ########.fr       */
+/*   Created: 2026/02/27 01:57:52 by uviana-b          #+#    #+#             */
+/*   Updated: 2026/02/27 17:08:39 by lalves-d         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "cub3d.h"
 
-void	free_map_copy(char **map_copy)
-{
-	int	i;
 
-	i = 0;
-	while (map_copy[i])
-		free(map_copy[i++]);
-	free(map_copy);
+
+
+static int	process_file_line(t_pfn pfl, t_config *cfg, char **temp_map)
+{
+	char			*trimmed;
+	int				res;
+	t_parser_state	state;
+
+	trimmed = pfl.line;
+	while (*trimmed == ' ' || *trimmed == '\n')
+		trimmed++;
+	if (*trimmed == '\0')
+	{
+		if (cfg->is_in_map_section)
+			return (printf(ERROR_MSG "Linha vazia dentro do mapa.\n"), 1);
+		return (0);
+	}
+	state.temp_map = temp_map;
+	state.map_count = *pfl.map_count;
+	state.config_count = *pfl.config_count;
+	res = process_non_empty_line(trimmed, cfg, &state);
+	*pfl.map_count = state.map_count;
+	*pfl.config_count = state.config_count;
+	return (res);
 }
 
-static int	handle_map_line(char *line, char **temp_map, int *count)
+static int	read_file_lines(int fd, t_config *cfg, char **temp_map)
 {
-	int	map_check;
+	t_pfn	n_pfl;
+	int		map_count = 0;
+	int		config_count = 0;
 
-	map_check = is_map_line(line);
-	if (map_check == -1)
+	n_pfl.map_count = &map_count;
+	n_pfl.config_count = &config_count;
+	n_pfl.line = get_next_line(fd);
+	while (n_pfl.line)
 	{
-		printf(ERROR_MSG "Caracteres inválidos no mapa.\n");
-		return (1);
+		if (process_file_line(n_pfl, cfg, temp_map))
+		{
+			free(n_pfl.line);
+			close(fd);
+			return (1);
+		}
+		free(n_pfl.line);
+		n_pfl.line = get_next_line(fd);
 	}
-	temp_map[*count] = ft_strdup(line);
-	if (!temp_map[*count])
-	{
-		printf(ERROR_MSG "Erro de alocação de memória.\n");
-		return (1);
-	}
-	(*count)++;
 	return (0);
 }
 
-static int	handle_config_line(char *line, t_config *cfg, int *count)
+int	parse_cub_file(char *filename, t_config *cfg)
 {
-	if (starts_with(line, "NO") || starts_with(line, "SO") || starts_with(line,
-			"WE") || starts_with(line, "EA"))
-	{
-		if (parse_config_line(line, cfg))
-			return (1);
-		(*count)++;
-	}
-	else if (starts_with(line, "F"))
-	{
-		cfg->floor_color = parse_color(skip_spaces(line + 1));
-		if (cfg->floor_color == -1)
-			return (1);
-		(*count)++;
-	}
-	else if (starts_with(line, "C"))
-	{
-		cfg->ceiling_color = parse_color(skip_spaces(line + 1));
-		if (cfg->ceiling_color == -1)
-			return (1);
-		(*count)++;
-	}
-	else
-		return (2);
-	return (0);
-}
+	int		fd;
+	char	*temp_map[MAX_MAP_LINES];
 
-/* Helper para lidar com linhas que iniciam a seção do mapa */
-static int	process_config_transition(char *line,
-	t_config *cfg, t_parser_state *state)
-{
-	if (state->config_count >= 6 && is_map_line(line))
+	fd = open(filename, O_RDONLY);
+	if (fd < 0)
 	{
-		cfg->is_in_map_section = 1;
-		return (handle_map_line(line, state->temp_map, &state->map_count));
-	}
-	if (state->config_count < 6)
-	{
-		printf(ERROR_MSG "Configurações incompletas antes do mapa.\n");
+		printf(ERROR_MSG "Não foi possível abrir o mapa.\n");
 		return (1);
 	}
-	printf(ERROR_MSG "Linha de configuração desconhecida.\n");
-	return (1);
-}
-
-//sequancia de funçoes derivadas da process_non_empty_line
-int	process_non_empty_line(char *line,
-	t_config *cfg, t_parser_state *state)
-{
-	int	res;
-
-	if (cfg->is_in_map_section)
-		return (handle_map_line(line, state->temp_map, &state->map_count));
-	res = handle_config_line(line, cfg, &state->config_count);
-	if (res == 1)
+	if (read_file_lines(fd, cfg, temp_map))
+	{
+		close(fd);
 		return (1);
-	if (res == 2)
-		return (process_config_transition(line, cfg, state));
+	}
+	close(fd);
+	// Aqui você pode chamar a função de validar mapa
+	// if (build_and_validate_map(cfg, temp_map, counts)) return (1);
 	return (0);
 }

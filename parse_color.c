@@ -6,14 +6,11 @@
 /*   By: lalves-d <lalves-d@student.42rio>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/15 08:30:32 by lalves-d          #+#    #+#             */
-/*   Updated: 2025/09/17 08:31:56 by lalves-d         ###   ########.fr       */
+/*   Updated: 2026/02/27 15:58:34 by lalves-d         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "cub3d.h"
-
-// Bira, da GIT na sua GNL pq to usando uma temporaria
-// Bira, da GIT na sua Printf pq to usando a original
 
 static int	is_numeric(char *str)
 {
