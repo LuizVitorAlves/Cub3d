@@ -6,7 +6,7 @@
 /*   By: lalves-d <lalves-d@student.42rio>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/16 19:13:15 by lalves-d          #+#    #+#             */
-/*   Updated: 2025/11/04 12:21:33 by lalves-d         ###   ########.fr       */
+/*   Updated: 2026/02/27 02:19:34 by lalves-d         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -136,6 +136,22 @@ typedef struct s_door
     int     is_open;
 }   t_door;
 
+//estrutura da flord fill
+typedef struct s_ff
+{
+    int x;
+    int y; 
+    int max_x; 
+    int max_y;
+}t_ff;
+//estrutura da parser_cub_utils_suport
+typedef struct s_parser_state
+{
+	char	**temp_map;
+	int		map_count;
+	int		config_count;
+}	t_parser_state;
+
 // raycasting.c
 void    raycasting_loop(t_game *game);
 double calculate_dda(t_game *game, double ray_dir_x, double ray_dir_y, int *side, char *hit_char);
@@ -150,6 +166,17 @@ int     close_window(t_game *game);
 // parse_cub.c
 int     parse_cub_file(char *filename, t_config *config);
 int     validate_map(t_config *cfg);
+int	is_map_line(const char *line);
+int	parse_texture_path(char *line, t_config *cfg);
+int	parse_color_info(char *line, t_config *cfg);
+
+//parser_cub_utils.c
+int	parse_config_line(char *line, t_config *cfg);
+void	flood_fill(char **map, t_ff ff,
+	int *is_valid);
+int	find_and_validate_player(t_config *cfg,
+	int *player_x, int *player_y);
+char	**copy_map_wrapper(char **map, int height);
 
 // parse_utils.c
 int     starts_with(const char *str, const char *prefix);
@@ -158,8 +185,12 @@ char    **copy_map(char **temp_map, int size);
 void    free_config_and_map(t_config *cfg);
 int     ft_atoi(const char *str);
 void    free_game_memory(t_game *game);
+t_ff	init_ff(int player_x, int player_y, char **map_copy, int map_height);
 
-
+//parser_cub_utils_suport
+int	process_non_empty_line(char *line,
+	t_config *cfg, t_parser_state *state);
+  
 //textures.c
 int load_textures(t_game *game);
 int get_tex_pixel(t_tex *tex, int x, int y);

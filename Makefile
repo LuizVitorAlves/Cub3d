@@ -2,7 +2,7 @@ NAME = cub3d
 
 # Compilador e flags
 CC = cc
-CFLAGS = -Wall -Wextra -Werror -Iinc -Ift_printf
+CFLAGS = -Wall -Wextra -Werror -Iinc -Ift_printf -g
 
 # Diretório da MLX
 MLX_DIR = ./minilibx-linux
@@ -29,7 +29,10 @@ SRCS = \
 	door.c \
 	sprite.c \
 	minimap.c \
-	textures.c
+	textures.c\
+	parser_cub_utils.c\
+	parser_cub_utils_suport.c\
+	utils_suport_helper.c
 
 # Arquivos objeto
 OBJS = $(SRCS:.c=.o)

@@ -6,7 +6,7 @@
 /*   By: lalves-d <lalves-d@student.42rio>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/22 07:22:19 by lalves-d          #+#    #+#             */
-/*   Updated: 2025/10/20 11:25:04 by lalves-d         ###   ########.fr       */
+/*   Updated: 2026/02/26 19:19:36 by lalves-d         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,19 +16,27 @@ void move_forward_backward(int keycode, t_game *game)
 {
     double next_x = game->player.pos_x;
     double next_y = game->player.pos_y;
-    int map_x = (int)next_x;
-    int map_y = (int)next_y;
-    if (keycode == 119) // Tecla W
+    int map_x;
+    int map_y;
+
+    if (keycode == 119)
     {
         next_x += game->player.dir_x * MOVE_SPEED;
         next_y += game->player.dir_y * MOVE_SPEED;
     }
-    if (keycode == 115) // Tecla S
+    if (keycode == 115)
     {
         next_x -= game->player.dir_x * MOVE_SPEED;
         next_y -= game->player.dir_y * MOVE_SPEED;
     }
-    if (game->cfg.map[map_y][map_x] != '1' && game->cfg.map[map_y][map_x] != 'D')
+
+    map_x = (int)next_x;
+    map_y = (int)next_y;
+
+    if (map_y >= 0 && map_y < game->cfg.map_height
+        && map_x >= 0 && map_x < (int)strlen(game->cfg.map[map_y])
+        && game->cfg.map[map_y][map_x] != '1'
+        && game->cfg.map[map_y][map_x] != 'D')
     {
         game->player.pos_x = next_x;
         game->player.pos_y = next_y;
