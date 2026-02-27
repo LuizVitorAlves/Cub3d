@@ -6,7 +6,7 @@
 /*   By: lalves-d <lalves-d@student.42rio>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/16 19:13:15 by lalves-d          #+#    #+#             */
-/*   Updated: 2026/02/27 03:17:38 by lalves-d         ###   ########.fr       */
+/*   Updated: 2026/02/27 09:18:38 by lalves-d         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -156,6 +156,29 @@ typedef struct s_parser_state
 	int		config_count;
 }	t_parser_state;
 
+//estrutura do quadrado
+typedef struct s_rect
+{
+	int	x;
+	int	y;
+	int	width;
+	int	height;
+	int	color;
+}	t_rect;
+
+//struct da drawline
+typedef struct s_line
+{
+	int		x0;
+	int		y0;
+	int		x1;
+	int		y1;
+	int		color;
+	int		steps;
+	float	x_inc;
+	float	y_inc;
+}	t_line;
+
 // raycasting.c
 void    raycasting_loop(t_game *game);
 double calculate_dda(t_game *game, double ray_dir_x, double ray_dir_y, int *side, char *hit_char);
@@ -229,5 +252,13 @@ void    cleanup_on_gun_error(t_game *game, char *error_msg);
 
 //minimap.c
 void	render_minimap(t_game *game);
+void	draw_rect_transparent(t_game *game, t_rect rect);
+void	draw_rect_solid(t_game *game, t_rect rect);
+void	draw_line(t_game *game, t_line line);
+int	get_tile_color(char tile);
+
+
+
+
 
 #endif

@@ -33,7 +33,10 @@ SRCS = \
 	parser_cub_utils.c\
 	parser_cub_utils_suport.c\
 	utils_suport_helper.c\
-	validate_map.c
+	validate_map.c\
+	keys_utils.c\
+	minimap_utils.c\
+	parser_utils2.c
 
 # Arquivos objeto
 OBJS = $(SRCS:.c=.o)

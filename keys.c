@@ -6,7 +6,7 @@
 /*   By: lalves-d <lalves-d@student.42rio>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/22 07:22:19 by lalves-d          #+#    #+#             */
-/*   Updated: 2026/02/27 03:56:12 by lalves-d         ###   ########.fr       */
+/*   Updated: 2026/02/27 06:04:27 by lalves-d         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,22 +15,18 @@
 void	move_forward_backward(int keycode, t_game *game)
 {
 	double	next_x;
-	double	next_y ;
+	double	next_y;
 	int		map_x;
 	int		map_y;
+	double	dir;
 
-	next_x = game->player.pos_x;
-	next_y = game->player.pos_y;
-	if (keycode == 119)
-	{
-		next_x += game->player.dir_x * MOVE_SPEED;
-		next_y += game->player.dir_y * MOVE_SPEED;
-	}
+	if (keycode != 119 && keycode != 115)
+		return ;
+	dir = 1.0;
 	if (keycode == 115)
-	{
-		next_x -= game->player.dir_x * MOVE_SPEED;
-		next_y -= game->player.dir_y * MOVE_SPEED;
-	}
+		dir = -1.0;
+	next_x = game->player.pos_x + game->player.dir_x * MOVE_SPEED * dir;
+	next_y = game->player.pos_y + game->player.dir_y * MOVE_SPEED * dir;
 	map_x = (int)next_x;
 	map_y = (int)next_y;
 	if (map_y >= 0 && map_y < game->cfg.map_height
@@ -74,83 +70,48 @@ void	move_left_right(int keycode, t_game *game)
 
 void	rotate_camera(int keycode, t_game *game)
 {
+	double	angle;
 	double	old_dir_x;
 	double	old_plane_x;
 
+	if (keycode != 65361 && keycode != 65363)
+		return ;
+	angle = ROT_SPEED;
+	if (keycode == 65361)
+		angle = -ROT_SPEED;
 	old_dir_x = game->player.dir_x;
 	old_plane_x = game->player.plane_x;
-	if (keycode == 65361)
+	game->player.dir_x = old_dir_x * cos(angle)
+		- game->player.dir_y * sin(angle);
+	game->player.dir_y = old_dir_x * sin(angle)
+		+ game->player.dir_y * cos(angle);
+	game->player.plane_x = old_plane_x * cos(angle)
+		- game->player.plane_y * sin(angle);
+	game->player.plane_y = old_plane_x * sin(angle)
+		+ game->player.plane_y * cos(angle);
+}
+
+int	handle_key_press(int keycode, t_game *game)
+{
+	handle_keys(keycode, game);
+	return (0);
+}
+
+int	handle_keys(int keycode, t_game *game)
+{
+	ft_printf("Tecla pressionada, keycode: %d\n", keycode);
+	if (keycode == 65307)
+		close_window(game);
+	if ((keycode == 119 || keycode == 115))
+		move_forward_backward(keycode, game);
+	if (keycode == 97 || keycode == 100)
+		move_left_right(keycode, game);
+	if (keycode == 65361 || keycode == 65363)
+		rotate_camera(keycode, game);
+	if (keycode == 32)
 	{
-		game->player.dir_x = old_dir_x * cos(-ROT_SPEED)
-			- game->player.dir_y * sin(-ROT_SPEED);
-		game->player.dir_y = old_dir_x * sin(-ROT_SPEED)
-			+ game->player.dir_y * cos(-ROT_SPEED);
-		game->player.plane_x = old_plane_x * cos(-ROT_SPEED)
-			- game->player.plane_y * sin(-ROT_SPEED);
-		game->player.plane_y = old_plane_x * sin(-ROT_SPEED)
-			+ game->player.plane_y * cos(-ROT_SPEED);
+		interact_door(game);
+		gun_start_anim(&game->gun);
 	}
-	if (keycode == 65363)
-	{
-		game->player.dir_x = old_dir_x * cos(ROT_SPEED)
-			- game->player.dir_y * sin(ROT_SPEED);
-		game->player.dir_y = old_dir_x * sin(ROT_SPEED)
-			+ game->player.dir_y * cos(ROT_SPEED);
-		game->player.plane_x = old_plane_x * cos(ROT_SPEED)
-			- game->player.plane_y * sin(ROT_SPEED);
-		game->player.plane_y = old_plane_x * sin(ROT_SPEED)
-			+ game->player.plane_y * cos(ROT_SPEED);
-	}
+	return (0);
 }
-
-int	handle_key_press(int keycode, t_game *game){
-    handle_keys(keycode,game);
-    return(0);
-}
-int handle_keys(int keycode, t_game *game)
-{
-    printf("Tecla pressionada, keycode: %d\n", keycode);
-    if (keycode == 65307)
-        close_window(game);
-    if ((keycode == 119 || keycode == 115))
-        move_forward_backward(keycode, game);
-    if (keycode == 97 || keycode == 100)
-        move_left_right(keycode, game);
-    if (keycode == 65361 || keycode == 65363)
-        rotate_camera(keycode, game);
-    if (keycode == 32)
-    {
-        interact_door(game);
-        gun_start_anim(&game->gun);
-    }
-    return (0);
-}
-
-int close_window(t_game *game)
-{
-    mlx_destroy_window(game->mlx, game->win);
-    exit(0);
-    return (0);
-}
-
-int mouse_move_hook(int x, int y, t_game *game)
-{
-    int center_x = SCREEN_WIDTH / 2;
-    int center_y = SCREEN_HEIGHT / 2;
-    double rot_speed;
-    double old_dir_x;
-    double old_plane_x;
-
-    (void)y;
-    rot_speed = (x - center_x) * ROT_SPEED_MOUSE;
-    old_dir_x = game->player.dir_x;
-    old_plane_x = game->player.plane_x;
-    game->player.dir_x = old_dir_x * cos(rot_speed) - game->player.dir_y * sin(rot_speed);
-    game->player.dir_y = old_dir_x * sin(rot_speed) + game->player.dir_y * cos(rot_speed);
-    game->player.plane_x = old_plane_x * cos(rot_speed) - game->player.plane_y * sin(rot_speed);
-    game->player.plane_y = old_plane_x * sin(rot_speed) + game->player.plane_y * cos(rot_speed);
-    mlx_mouse_move(game->mlx, game->win, center_x, center_y);
-    return (0);
-}
-
-

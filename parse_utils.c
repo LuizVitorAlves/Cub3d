@@ -1,20 +1,20 @@
 /* ************************************************************************** */
-/* */
-/* :::      ::::::::   */
-/* parse_utils.c                                      :+:      :+:    :+:   */
-/* +:+ +:+         +:+     */
-/* By: lalves-d <lalves-d@student.42.fr>          +#+  +:+       +#+        */
-/* +#+#+#+#+#+   +#+           */
-/* Created: 2025/07/15 14:57:55 by lalves-d          #+#    #+#             */
-/* Updated: 2025/07/15 15:59:42 by lalves-d         ###   ########.fr       */
-/* */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   parse_utils.c                                      :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: lalves-d <lalves-d@student.42rio>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2026/02/27 09:06:38 by uviana-b          #+#    #+#             */
+/*   Updated: 2026/02/27 09:11:24 by lalves-d         ###   ########.fr       */
+/*                                                                            */
 /* ************************************************************************** */
 
 #include "cub3d.h"
 
-int starts_with(const char *str, const char *prefix)
+int	starts_with(const char *str, const char *prefix)
 {
-	int i;
+	int	i;
 
 	i = 0;
 	while (prefix[i])
@@ -26,11 +26,11 @@ int starts_with(const char *str, const char *prefix)
 	return (1);
 }
 
-char *ft_strdup(const char *s)
+char	*ft_strdup(const char *s)
 {
-	char *new;
-	size_t len;
-	size_t i;
+	char	*new;
+	size_t	len;
+	size_t	i;
 
 	len = strlen(s);
 	i = 0;
@@ -46,10 +46,10 @@ char *ft_strdup(const char *s)
 	return (new);
 }
 
-char **copy_map(char **temp_map, int size)
+char	**copy_map(char **temp_map, int size)
 {
-	char **map;
-	int i;
+	char	**map;
+	int		i;
 
 	map = malloc(sizeof(char *) * (size + 1));
 	if (!map)
@@ -71,7 +71,7 @@ char **copy_map(char **temp_map, int size)
 	return (map);
 }
 
-static void safe_free(void **ptr)
+static void	safe_free(void **ptr)
 {
 	if (ptr && *ptr)
 	{
@@ -80,12 +80,12 @@ static void safe_free(void **ptr)
 	}
 }
 
-void free_config_and_map(t_config *cfg)
+void	free_config_and_map(t_config *cfg)
 {
-	int i;
+	int	i;
 
 	if (!cfg)
-		return;
+		return ;
 	safe_free((void **)&cfg->no_path);
 	safe_free((void **)&cfg->so_path);
 	safe_free((void **)&cfg->we_path);
@@ -101,39 +101,4 @@ void free_config_and_map(t_config *cfg)
 		free(cfg->map);
 		cfg->map = NULL;
 	}
-}
-
-void free_game_memory(t_game *game)
-{
-	free_config_and_map(&game->cfg);
-	if (game->img.img)
-		mlx_destroy_image(game->mlx, game->img.img);
-	if (game->win)
-		mlx_destroy_window(game->mlx, game->win);
-}
-
-int ft_atoi(const char *str)
-{
-	int sign;
-	long result;
-	int i;
-
-	i = 0;
-	result = 0;
-	sign = 1;
-	while (str[i] == ' ' || (str[i] >= '\t' && str[i] <= '\r'))
-		i++;
-	if (str[i] == '-')
-	{
-		sign = -1;
-		i++;
-	}
-	else if (str[i] == '+')
-		i++;
-	while (str[i] >= '0' && str[i] <= '9')
-	{
-		result = result * 10 + (str[i] - '0');
-		i++;
-	}
-	return (sign * result);
 }
