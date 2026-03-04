@@ -6,7 +6,7 @@
 /*   By: lalves-d <lalves-d@student.42rio>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/22 07:45:48 by lalves-d          #+#    #+#             */
-/*   Updated: 2026/02/27 17:47:22 by lalves-d         ###   ########.fr       */
+/*   Updated: 2026/03/04 19:39:53 by lalves-d         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,7 +47,7 @@ int	main(int argc, char **argv)
 
 static void	init_var_main(t_game *game)
 {
-	mlx_mouse_hide(game->mlx, game->win);
+	//mlx_mouse_hide(game->mlx, game->win);
 	mlx_mouse_move(game->mlx, game->win, SCREEN_WIDTH / 2, SCREEN_HEIGHT / 2);
 	game->img.img = mlx_new_image(game->mlx, SCREEN_WIDTH, SCREEN_HEIGHT);
 	game->img.addr = mlx_get_data_addr(game->img.img, &game->img.bpp,

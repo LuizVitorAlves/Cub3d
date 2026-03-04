@@ -6,7 +6,7 @@
 /*   By: lalves-d <lalves-d@student.42rio>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/27 01:57:52 by uviana-b          #+#    #+#             */
-/*   Updated: 2026/03/04 16:40:38 by lalves-d         ###   ########.fr       */
+/*   Updated: 2026/03/04 16:46:45 by lalves-d         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,13 +15,14 @@
 static int	process_file_line(char *line, t_config *cfg, char **temp_map,
 	int *counts)
 {
-	//count 0 mapcount e count 1 é a config_count
-	char	*trimmed;
-	int		res;
-    t_parser_state state;
-	int *map_count = &counts[0];
-	int *config_count = &counts[1];
-    
+	char			*trimmed;
+	int				res;
+	t_parser_state	state;
+	int				*map_count;
+	int				*config_count;
+
+	map_count = &counts[0];
+	config_count = &counts[1];
 	trimmed = line;
 	while (*trimmed == ' ' || *trimmed == '\n')
 		trimmed++;
@@ -31,16 +32,12 @@ static int	process_file_line(char *line, t_config *cfg, char **temp_map,
 			return (printf(ERROR_MSG "Linha vazia dentro do mapa.\n"), 1);
 		return (0);
 	}
-
-state.temp_map = temp_map;
-state.map_count = *map_count;       // se map_count for ponteiro, copie o valor
-state.config_count = *config_count; // se config_count for ponteiro, copie o valor
-
-res = process_non_empty_line(trimmed, cfg, &state);
-
-// atualizar contadores se necessário
-*map_count = state.map_count;
-*config_count = state.config_count;
+	state.temp_map = temp_map;
+	state.map_count = *map_count;
+	state.config_count = *config_count;
+	res = process_non_empty_line(trimmed, cfg, &state);
+	*map_count = state.map_count;
+	*config_count = state.config_count;
 	return (res);
 }
 

@@ -20,7 +20,8 @@ SRCS = \
 	main.c \
 	parse_cub.c \
 	parse_utils.c \
-	gnl_provisoria.c \
+	./gnl/get_next_line.c \
+	./gnl/get_next_line_utils.c \
 	parse_color.c \
 	tokenizador.c \
 	raycasting.c \
