@@ -6,7 +6,7 @@
 /*   By: lalves-d <lalves-d@student.42rio>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/16 19:13:15 by lalves-d          #+#    #+#             */
-/*   Updated: 2026/02/27 17:55:24 by lalves-d         ###   ########.fr       */
+/*   Updated: 2026/03/04 16:10:36 by lalves-d         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -240,6 +240,14 @@ typedef struct s_pfn
     int *config_count;
 }t_pfn;
 
+//struct da render utils.c
+typedef struct s_draw_wall_slice
+{
+	int	wall_height;
+	int	draw_start;
+	int	draw_end;
+	int	y;
+}t_draw_wall_slice;
 // raycasting.c
 void    raycasting_loop(t_game *game);
 double calculate_dda(t_game *game, t_dda *dda);

@@ -6,19 +6,21 @@
 /*   By: lalves-d <lalves-d@student.42rio>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/27 01:57:52 by uviana-b          #+#    #+#             */
-/*   Updated: 2026/02/27 02:34:22 by lalves-d         ###   ########.fr       */
+/*   Updated: 2026/03/04 16:40:38 by lalves-d         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
-
 
 #include "cub3d.h"
 
 static int	process_file_line(char *line, t_config *cfg, char **temp_map,
-		int *map_count, int *config_count)
+	int *counts)
 {
+	//count 0 mapcount e count 1 é a config_count
 	char	*trimmed;
 	int		res;
     t_parser_state state;
+	int *map_count = &counts[0];
+	int *config_count = &counts[1];
     
 	trimmed = line;
 	while (*trimmed == ' ' || *trimmed == '\n')
@@ -56,7 +58,7 @@ static int	read_file_lines(int fd, t_config *cfg, char **temp_map,
 	line = get_next_line(fd);
 	while (line)
 	{
-		if (process_file_line(line, cfg, temp_map, &counts[1], &counts[0]))
+		if (process_file_line(line, cfg, temp_map, counts))
 		{
 			free(line);
 			return (1);
