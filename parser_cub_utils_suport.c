@@ -6,7 +6,7 @@
 /*   By: lalves-d <lalves-d@student.42rio>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/27 01:03:55 by uviana-b          #+#    #+#             */
-/*   Updated: 2026/02/27 02:54:13 by lalves-d         ###   ########.fr       */
+/*   Updated: 2026/03/05 02:45:42 by lalves-d         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,7 +45,7 @@ static int	handle_map_line(char *line, char **temp_map, int *count)
 static int	handle_config_line(char *line, t_config *cfg, int *count)
 {
 	if (starts_with(line, "NO") || starts_with(line, "SO") || starts_with(line,
-			"WE") || starts_with(line, "EA"))
+			"WE") || starts_with(line, "EA") || starts_with(line, "DO"))
 	{
 		if (parse_config_line(line, cfg))
 			return (1);
@@ -74,12 +74,12 @@ static int	handle_config_line(char *line, t_config *cfg, int *count)
 static int	process_config_transition(char *line,
 	t_config *cfg, t_parser_state *state)
 {
-	if (state->config_count >= 6 && is_map_line(line))
+	if (state->config_count >= 7 && is_map_line(line))
 	{
 		cfg->is_in_map_section = 1;
 		return (handle_map_line(line, state->temp_map, &state->map_count));
 	}
-	if (state->config_count < 6)
+	if (state->config_count < 7)
 	{
 		printf(ERROR_MSG "Configurações incompletas antes do mapa.\n");
 		return (1);

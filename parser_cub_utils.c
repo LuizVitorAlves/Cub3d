@@ -6,16 +6,27 @@
 /*   By: lalves-d <lalves-d@student.42rio>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/26 23:07:12 by uviana-b          #+#    #+#             */
-/*   Updated: 2026/02/27 17:48:41 by lalves-d         ###   ########.fr       */
+/*   Updated: 2026/03/05 02:43:30 by lalves-d         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "cub3d.h"
 
+// int	parse_config_line(char *line, t_config *cfg)
+// {
+// 	if (starts_with(line, "NO") || starts_with(line, "SO") || starts_with(line,
+// 			"WE") || starts_with(line, "EA"))
+// 		return (parse_texture_path(line, cfg));
+// 	else if (starts_with(line, "F") || starts_with(line, "C"))
+// 		return (parse_color_info(line, cfg));
+// 	return (1);
+// }
+
 int	parse_config_line(char *line, t_config *cfg)
 {
-	if (starts_with(line, "NO") || starts_with(line, "SO") || starts_with(line,
-			"WE") || starts_with(line, "EA"))
+	if (starts_with(line, "NO") || starts_with(line, "SO")
+		|| starts_with(line, "WE") || starts_with(line, "EA")
+		|| starts_with(line, "DO"))
 		return (parse_texture_path(line, cfg));
 	else if (starts_with(line, "F") || starts_with(line, "C"))
 		return (parse_color_info(line, cfg));

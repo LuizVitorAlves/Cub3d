@@ -6,7 +6,7 @@
 /*   By: lalves-d <lalves-d@student.42rio>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/27 01:57:52 by uviana-b          #+#    #+#             */
-/*   Updated: 2026/03/04 16:46:45 by lalves-d         ###   ########.fr       */
+/*   Updated: 2026/03/05 02:20:02 by lalves-d         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -70,7 +70,7 @@ static int	build_and_validate_map(t_config *cfg, char **temp_map,
 {
 	int	i;
 
-	if (counts[0] < 6 || counts[1] == 0)
+	if (counts[0] < 7 || counts[1] == 0)
 	{
 		printf(ERROR_MSG "Configurações ou mapa incompletos.\n");
 		return (1);
