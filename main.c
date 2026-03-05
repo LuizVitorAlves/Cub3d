@@ -6,11 +6,10 @@
 /*   By: lalves-d <lalves-d@student.42rio>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/22 07:45:48 by lalves-d          #+#    #+#             */
-/*   Updated: 2026/03/04 19:39:53 by lalves-d         ###   ########.fr       */
+/*   Updated: 2026/03/04 21:17:02 by lalves-d         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "cub3d.h"
 #include "cub3d.h"
 
 static void	init_var_main(t_game *game);
@@ -47,7 +46,6 @@ int	main(int argc, char **argv)
 
 static void	init_var_main(t_game *game)
 {
-	//mlx_mouse_hide(game->mlx, game->win);
 	mlx_mouse_move(game->mlx, game->win, SCREEN_WIDTH / 2, SCREEN_HEIGHT / 2);
 	game->img.img = mlx_new_image(game->mlx, SCREEN_WIDTH, SCREEN_HEIGHT);
 	game->img.addr = mlx_get_data_addr(game->img.img, &game->img.bpp,
@@ -55,7 +53,7 @@ static void	init_var_main(t_game *game)
 	init_player(game);
 	mlx_loop_hook(game->mlx, render_frame, game);
 	mlx_hook(game->win, 2, 1L << 0, handle_key_press, game);
-	mlx_hook(game->win, 6, 1L << 6, mouse_move_hook, game);
+	setup_mouse_hook(game);
 	mlx_hook(game->win, 17, 0, close_window, game);
 	mlx_loop(game->mlx);
 	free_game_memory(game);

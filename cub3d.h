@@ -6,7 +6,7 @@
 /*   By: lalves-d <lalves-d@student.42rio>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/16 19:13:15 by lalves-d          #+#    #+#             */
-/*   Updated: 2026/03/04 19:38:14 by lalves-d         ###   ########.fr       */
+/*   Updated: 2026/03/04 21:16:46 by lalves-d         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -337,5 +337,6 @@ void	draw_rect_solid(t_game *game,
 void	draw_line(t_game *game,
 			t_line line);
 int		get_tile_color(char tile);
+void	setup_mouse_hook(t_game *game);
 
 #endif
