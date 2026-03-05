@@ -12,35 +12,6 @@
 
 #include "cub3d.h"
 
-/*static int	process_file_line(char *line, t_config *cfg, char **temp_map,
-	int *counts)
-{
-	char			*trimmed;
-	int				res;
-	t_parser_state	state;
-	int				*map_count;
-	int				*config_count;
-
-	config_count = &counts[0];
-	map_count = &counts[1];
-	trimmed = line;
-	while (*trimmed == ' ' || *trimmed == '\n')
-		trimmed++;
-	if (*trimmed == '\0')
-	{
-		if (cfg->is_in_map_section)
-			return (printf(ERROR_MSG "Linha vazia dentro do mapa.\n"), 1);
-		return (0);
-	}
-	state.temp_map = temp_map;
-	state.map_count = *map_count;
-	state.config_count = *config_count;
-	res = process_non_empty_line(trimmed, cfg, &state);
-	*map_count = state.map_count;
-	*config_count = state.config_count;
-	return (res);
-}*/
-
 static int	process_file_line(char *line, t_config *cfg, char **temp_map,
 	int *counts)
 {

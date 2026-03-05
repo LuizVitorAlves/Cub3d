@@ -56,6 +56,7 @@
 # define TEX_SO 1
 # define TEX_WE 2
 # define TEX_EA 3
+# define TEX_DO 4
 
 typedef struct s_gun
 {
@@ -83,6 +84,7 @@ typedef struct s_config
 	char	*so_path;
 	char	*we_path;
 	char	*ea_path;
+	char	*do_path;
 	int		floor_color;
 	int		ceiling_color;
 	char	**map;
@@ -119,7 +121,7 @@ typedef struct s_game
 	t_config	cfg;
 	t_player	player;
 	t_gun		gun;
-	t_tex		tex[4];
+	t_tex		tex[5];
 }	t_game;
 
 typedef struct s_door
@@ -194,9 +196,9 @@ typedef struct s_ray_loop
 	int		wall_height;
 	int		draw_start;
 	int		draw_end;
-	double	wallX;
+	double	wallx;
 	double	step;
-	double	texPos;
+	double	texpos;
 }	t_ray_loop;
 
 typedef struct s_gun_tmp

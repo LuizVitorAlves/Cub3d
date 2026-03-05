@@ -40,7 +40,7 @@ t_tex	*select_texture(t_game *game,
 
 	if (dda->side == 0)
 	{
-		rl->wallX = game->player.pos_y
+		rl->wallx = game->player.pos_y
 			+ rl->perp_wall_dist * dda->ray_dir_y;
 		if (dda->ray_dir_x > 0)
 			tex = &game->tex[TEX_WE];
@@ -49,14 +49,14 @@ t_tex	*select_texture(t_game *game,
 	}
 	else
 	{
-		rl->wallX = game->player.pos_x
+		rl->wallx = game->player.pos_x
 			+ rl->perp_wall_dist * dda->ray_dir_x;
 		if (dda->ray_dir_y > 0)
 			tex = &game->tex[TEX_NO];
 		else
 			tex = &game->tex[TEX_SO];
 	}
-	rl->wallX -= floor(rl->wallX);
+	rl->wallx -= floor(rl->wallx);
 	return (tex);
 }
 
@@ -79,14 +79,14 @@ void	draw_column(t_game *game, t_ray_loop *rl,
 	while (y < rl->draw_start)
 		my_mlx_pixel_put(&game->img, x, y++,
 			game->cfg.ceiling_color);
-	tex_x = (int)(rl->wallX * tex->width);
+	tex_x = (int)(rl->wallx * tex->width);
 	rl->step = (double)tex->height / rl->wall_height;
-	rl->texPos = (rl->draw_start - SCREEN_HEIGHT / 2.0
+	rl->texpos = (rl->draw_start - SCREEN_HEIGHT / 2.0
 			+ rl->wall_height / 2.0) * rl->step;
 	while (y < rl->draw_end)
 	{
-		tex_y = (int)rl->texPos;
-		rl->texPos += rl->step;
+		tex_y = (int)rl->texpos;
+		rl->texpos += rl->step;
 		if (tex_y < 0)
 			tex_y = 0;
 		if (tex_y >= tex->height)

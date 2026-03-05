@@ -41,6 +41,8 @@ int	load_textures(t_game *game)
 		return (1);
 	if (load_one_texture(game, &game->tex[TEX_EA], game->cfg.ea_path))
 		return (1);
+	if(load_one_texture(game, &game->tex[TEX_DO], game->cfg.do_path))
+		return (1);
 	return (0);
 }
 

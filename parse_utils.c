@@ -90,6 +90,7 @@ void	free_config_and_map(t_config *cfg)
 	safe_free((void **)&cfg->so_path);
 	safe_free((void **)&cfg->we_path);
 	safe_free((void **)&cfg->ea_path);
+	safe_free((void **)&cfg->do_path);
 	if (cfg->map)
 	{
 		i = 0;

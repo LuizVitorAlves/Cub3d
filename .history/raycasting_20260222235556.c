@@ -145,15 +145,15 @@ void raycasting_loop(t_game *game)
 
 
         //calculate where the rau ray hit
-        double wallX;
+        double wallx;
 
         (void)tex_x;
         if (side == 0)
-        wallX = game->player.pos_y + perp_wall_dist * ray_dir_y;
+        wallx = game->player.pos_y + perp_wall_dist * ray_dir_y;
         else
-        wallX = game->player.pos_x + perp_wall_dist * ray_dir_x;
+        wallx = game->player.pos_x + perp_wall_dist * ray_dir_x;
         
-        wallX -= floor(wallX);
+        wallx -= floor(wallx);
         
         
         
@@ -173,7 +173,7 @@ else // side == 1, parede horizontal (eixo Y)
     tex = &game->tex[TEX_SO];
 }
 
-tex_x = (int)(wallX * (double)tex->width);
+tex_x = (int)(wallx * (double)tex->width);
 wall_height = (int)(SCREEN_HEIGHT / perp_wall_dist);
 draw_start = (-wall_height / 2) + (SCREEN_HEIGHT / 2);
 if (draw_start < 0)

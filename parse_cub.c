@@ -50,6 +50,8 @@ static char	**get_target_path(char *line, t_config *cfg)
 		return (&cfg->we_path);
 	else if (starts_with(line, "EA "))
 		return (&cfg->ea_path);
+	else if(starts_with(line,"DO "))
+		return(&cfg->do_path);
 	return (NULL);
 }
 

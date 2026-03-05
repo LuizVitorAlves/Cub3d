@@ -139,7 +139,7 @@ void raycasting_loop(t_game *game)
         double  ray_dir_x = game->player.dir_x + game->player.plane_x * camera_x;
         double  ray_dir_y = game->player.dir_y + game->player.plane_y * camera_x;
         double  perp_wall_dist;
-        double  wallX;
+        double  wallx;
         t_tex   *tex;
         int     tex_x;
 
@@ -147,10 +147,10 @@ void raycasting_loop(t_game *game)
 
         // 1) ponto exato onde o raio bateu na parede (0..1 dentro do tile)
         if (side == 0)
-            wallX = game->player.pos_y + perp_wall_dist * ray_dir_y;
+            wallx = game->player.pos_y + perp_wall_dist * ray_dir_y;
         else
-            wallX = game->player.pos_x + perp_wall_dist * ray_dir_x;
-        wallX -= floor(wallX);
+            wallx = game->player.pos_x + perp_wall_dist * ray_dir_x;
+        wallx -= floor(wallx);
 
         // 2) escolher qual textura usar (NO/SO/WE/EA)
         if (side == 0) // parede vertical (eixo X)
@@ -169,7 +169,7 @@ void raycasting_loop(t_game *game)
         }
 
         // 3) coluna da textura (tex_x)
-        tex_x = (int)(wallX * (double)tex->width);
+        tex_x = (int)(wallx * (double)tex->width);
         if (tex_x < 0)
             tex_x = 0;
         if (tex_x >= tex->width)

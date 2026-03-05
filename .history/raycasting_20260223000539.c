@@ -152,12 +152,12 @@ void raycasting_loop(t_game *game)
             my_mlx_pixel_put(&game->img, x, y, game->cfg.ceiling_color);
 
         // 🔹 calcular ponto exato onde o raio bateu
-        double wallX;
+        double wallx;
         if (side == 0)
-            wallX = game->player.pos_y + perp_wall_dist * ray_dir_y;
+            wallx = game->player.pos_y + perp_wall_dist * ray_dir_y;
         else
-            wallX = game->player.pos_x + perp_wall_dist * ray_dir_x;
-        wallX -= floor(wallX);
+            wallx = game->player.pos_x + perp_wall_dist * ray_dir_x;
+        wallx -= floor(wallx);
 
         // 🔹 escolher textura correta
         t_tex *tex;
@@ -177,7 +177,7 @@ void raycasting_loop(t_game *game)
         }
 
         // 🔹 calcular coluna da textura
-        int tex_x = (int)(wallX * (double)tex->width);
+        int tex_x = (int)(wallx * (double)tex->width);
 
         if (side == 0 && ray_dir_x > 0)
             tex_x = tex->width - tex_x - 1;
@@ -186,13 +186,13 @@ void raycasting_loop(t_game *game)
 
         // 🔹 calcular passo vertical da textura
         double step = (double)tex->height / (double)wall_height;
-        double texPos = (draw_start - SCREEN_HEIGHT / 2.0 + wall_height / 2.0) * step;
+        double texpos = (draw_start - SCREEN_HEIGHT / 2.0 + wall_height / 2.0) * step;
 
         // 🔥 desenhar parede texturizada
         for (int y = draw_start; y < draw_end; y++)
         {
-            int tex_y = (int)texPos;
-            texPos += step;
+            int tex_y = (int)texpos;
+            texpos += step;
 
             if (tex_y < 0)
                 tex_y = 0;
