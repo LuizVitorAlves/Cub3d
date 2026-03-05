@@ -6,7 +6,7 @@
 /*   By: lalves-d <lalves-d@student.42rio>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/27 14:24:29 by uviana-b          #+#    #+#             */
-/*   Updated: 2026/03/05 02:52:48 by lalves-d         ###   ########.fr       */
+/*   Updated: 2026/03/05 03:06:22 by lalves-d         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,32 +32,38 @@ void	calc_wall_height(t_ray_loop *rl)
 	if (rl->draw_end >= SCREEN_HEIGHT)
 		rl->draw_end = SCREEN_HEIGHT - 1;
 }
-
-t_tex	*select_texture(t_game *game,
-	t_ray_loop *rl, t_dda *dda)
+t_tex *select_texture(t_game *game, t_ray_loop *rl, t_dda *dda)
 {
-	t_tex	*tex;
+    t_tex *tex;
 
-	if (dda->side == 0)
-	{
-		rl->wallx = game->player.pos_y
-			+ rl->perp_wall_dist * dda->ray_dir_y;
-		if (dda->ray_dir_x > 0)
-			tex = &game->tex[TEX_WE];
-		else
-			tex = &game->tex[TEX_EA];
-	}
-	else
-	{
-		rl->wallx = game->player.pos_x
-			+ rl->perp_wall_dist * dda->ray_dir_x;
-		if (dda->ray_dir_y > 0)
-			tex = &game->tex[TEX_NO];
-		else
-			tex = &game->tex[TEX_SO];
-	}
-	rl->wallx -= floor(rl->wallx);
-	return (tex);
+    if (dda->side == 0)
+        rl->wallx = game->player.pos_y +
+            rl->perp_wall_dist * dda->ray_dir_y;
+    else
+        rl->wallx = game->player.pos_x +
+            rl->perp_wall_dist * dda->ray_dir_x;
+
+    rl->wallx -= floor(rl->wallx);
+
+    if (*dda->hit_char == 'D')
+        return (&game->tex[TEX_DO]);
+
+    if (dda->side == 0)
+    {
+        if (dda->ray_dir_x > 0)
+            tex = &game->tex[TEX_WE];
+        else
+            tex = &game->tex[TEX_EA];
+    }
+    else
+    {
+        if (dda->ray_dir_y > 0)
+            tex = &game->tex[TEX_NO];
+        else
+            tex = &game->tex[TEX_SO];
+    }
+
+    return (tex);
 }
 
 void	draw_flor(t_game *game, int y, int x)
